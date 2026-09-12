@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Smart Queue - User Dashboard
+    </title>
+
+
+    <!-- Main Website CSS -->
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+
+    <!-- Chatbot CSS -->
+
+    <link
+        rel="stylesheet"
+        href="css/chatbot.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         MAIN DASHBOARD
+         ===================================================== -->
+
+    <div class="container">
+
+
+        <h1>
+            Smart Queue Management System
+        </h1>
+
+
+        <p id="welcome">
+            Welcome
+        </p>
+
+
+
+        <!-- =================================================
+             JOIN QUEUE
+             ================================================= -->
+
+        <h2>
+            Join Queue
+        </h2>
+
+
+        <input
+            id="queueId"
+            type="number"
+            placeholder="Enter Queue ID"
+        >
+
+
+        <button
+            onclick="joinQueue()"
+        >
+            Join Queue
+        </button>
+
+
+
+        <!-- =================================================
+             TOKEN
+             ================================================= -->
+
+        <h2>
+            Your Token
+        </h2>
+
+
+        <div id="token">
+            -
+        </div>
+
+
+
+        <!-- =================================================
+             WAITING TIME PREDICTION
+             ================================================= -->
+
+        <h2>
+            Waiting Time Prediction
+        </h2>
+
+
+        <input
+            id="queueLength"
+            type="number"
+            placeholder="Queue Length"
+        >
+
+
+        <input
+            id="counters"
+            type="number"
+            placeholder="Active Counters"
+        >
+
+
+        <input
+            id="serviceTime"
+            type="number"
+            placeholder="Average Service Time"
+        >
+
+
+        <input
+            id="arrivalRate"
+            type="number"
+            placeholder="Arrival Rate"
+        >
+
+
+        <button
+            onclick="predictTime()"
+        >
+            Predict Waiting Time
+        </button>
+
+
+        <h2 id="prediction">
+            -
+        </h2>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CHATBOT FLOATING BUTTON
+         ===================================================== -->
+
+    <button
+        class="chatbot-button"
+        onclick="toggleChatbot()"
+        title="Smart Queue Assistant"
+    >
+
+        🤖
+
+    </button>
+
+
+
+    <!-- =====================================================
+         CHATBOT WINDOW
+         ===================================================== -->
+
+    <div
+        id="chatbotWindow"
+        class="chatbot-window"
+    >
+
+
+        <!-- =================================================
+             CHATBOT HEADER
+             ================================================= -->
+
+        <div class="chatbot-header">
+
+
+            <div class="chatbot-title">
+
+
+                <div class="chatbot-icon">
+                    🤖
+                </div>
+
+
+                <div class="chatbot-title-text">
+
+                    <strong>
+                        Smart Queue Assistant
+                    </strong>
+
+                    <span>
+                        Project Help
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="chatbot-header-buttons">
+
+
+                <!-- Clear -->
+
+                <button
+                    onclick="clearChat()"
+                    title="Clear Chat"
+                >
+
+                    🗑️
+
+                </button>
+
+
+
+                <!-- Close -->
+
+                <button
+                    onclick="closeChatbot()"
+                    title="Close Chat"
+                >
+
+                    ✕
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             CHATBOT MESSAGES
+             ================================================= -->
+
+        <div
+            id="chatbotMessages"
+            class="chatbot-messages"
+        >
+
+
+            <!-- Initial chatbot message -->
+
+            <div
+                class="chat-message bot-message"
+            >
+
+                Hello! 👋
+
+                I am your Smart Queue Project Assistant.
+
+                I can explain your project, folder structure,
+                modules, Machine Learning, Random Forest,
+                dataset, Flask, SQLite, APIs, architecture,
+                workflow and viva questions.
+
+                Ask me anything about your project.
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             SUGGESTED QUESTIONS
+             ================================================= -->
+
+        <div class="chatbot-suggestions">
+
+
+            <!-- Project -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What is this project?'
+                )"
+            >
+
+                Project
+
+            </button>
+
+
+
+            <!-- ML -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What ML algorithm does this project use?'
+                )"
+            >
+
+                ML Algorithm
+
+            </button>
+
+
+
+            <!-- Dataset -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What are the dataset columns?'
+                )"
+            >
+
+                Dataset
+
+            </button>
+
+
+
+            <!-- Architecture -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'Explain the architecture'
+                )"
+            >
+
+                Architecture
+
+            </button>
+
+
+
+            <!-- Folder -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'Explain the folder structure'
+                )"
+            >
+
+                Folder Structure
+
+            </button>
+
+
+
+            <!-- Modules -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'Explain every module in the project'
+                )"
+            >
+
+                All Modules
+
+            </button>
+
+
+
+            <!-- Viva -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'Give me viva questions'
+                )"
+            >
+
+                Viva
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             CHATBOT INPUT
+             ================================================= -->
+
+        <div class="chatbot-input-area">
+
+
+            <input
+                id="chatbotInput"
+                class="chatbot-input"
+                type="text"
+                placeholder="Ask about your project..."
+                onkeydown="handleChatbotKey(event)"
+            >
+
+
+            <button
+                class="chatbot-send"
+                onclick="sendChatMessage()"
+                title="Send"
+            >
+
+                ➤
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         DASHBOARD JAVASCRIPT
+         ===================================================== -->
+
+    <script
+        src="js/dashboard.js"
+    ></script>
+
+
+
+    <!-- =====================================================
+         CHATBOT JAVASCRIPT
+         ===================================================== -->
+
+    <script
+        src="js/chatbot.js"
+    ></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard</title>
+
+
+    <!-- EXISTING CSS -->
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+
+    <!-- CHATBOT CSS -->
+
+    <link rel="stylesheet"
+          href="css/chatbot.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- =====================================================
+         ADMIN DASHBOARD
+         ===================================================== -->
+
+    <h1>
+        Admin Dashboard
+    </h1>
+
+
+
+    <!-- =====================================================
+         DASHBOARD SUMMARY
+         ===================================================== -->
+
+    <div class="dashboard-summary">
+
+
+        <p>
+            Total Users:
+            <strong id="users">0</strong>
+        </p>
+
+
+        <p>
+            Active Queues:
+            <strong id="queues">0</strong>
+        </p>
+
+
+        <p>
+            People Waiting:
+            <strong id="waiting">0</strong>
+        </p>
+
+
+        <p>
+            Average Predicted Waiting Time:
+
+            <strong id="average">
+                0
+            </strong>
+
+            minutes
+
+        </p>
+
+
+    </div>
+
+
+
+    <hr>
+
+
+
+    <!-- =====================================================
+         MANAGE QUEUE
+         ===================================================== -->
+
+    <h2>
+        Manage Queue
+    </h2>
+
+
+    <label>
+        Select Queue
+    </label>
+
+
+    <select
+        id="queueSelect"
+        onchange="loadQueueDetails()">
+
+        <option value="">
+            Select Queue
+        </option>
+
+    </select>
+
+
+
+    <h3>
+        Queue Information
+    </h3>
+
+
+
+    <input
+        id="queueName"
+        type="text"
+        placeholder="Queue Name"
+    >
+
+
+    <input
+        id="serviceType"
+        type="text"
+        placeholder="Service Type"
+    >
+
+
+    <input
+        id="activeCounters"
+        type="number"
+        min="1"
+        placeholder="Active Counters"
+    >
+
+
+    <input
+        id="averageServiceTime"
+        type="number"
+        min="1"
+        step="0.1"
+        placeholder="Average Service Time"
+    >
+
+
+    <input
+        id="arrivalRate"
+        type="number"
+        min="1"
+        step="0.1"
+        value="5"
+        placeholder="Arrival Rate"
+    >
+
+
+
+    <div>
+
+
+        <button
+            onclick="updateQueue()">
+
+            Update Queue
+
+        </button>
+
+
+        <button
+            onclick="serveNext()">
+
+            Serve Next Customer
+
+        </button>
+
+
+    </div>
+
+
+
+    <p id="message"></p>
+
+
+
+    <hr>
+
+
+
+    <!-- =====================================================
+         CURRENT QUEUE DETAILS
+         ===================================================== -->
+
+    <h2>
+        Current Queue Details
+    </h2>
+
+
+    <p>
+        Queue Name:
+
+        <strong id="currentQueueName">
+            -
+        </strong>
+    </p>
+
+
+    <p>
+        Service Type:
+
+        <strong id="currentServiceType">
+            -
+        </strong>
+    </p>
+
+
+    <p>
+        Active Counters:
+
+        <strong id="currentCounters">
+            -
+        </strong>
+    </p>
+
+
+    <p>
+        Average Service Time:
+
+        <strong id="currentServiceTime">
+            -
+        </strong>
+
+        minutes
+
+    </p>
+
+
+    <p>
+        People Waiting:
+
+        <strong id="currentPeopleWaiting">
+            -
+        </strong>
+    </p>
+
+
+
+    <hr>
+
+
+
+    <!-- =====================================================
+         PREDICTION
+         ===================================================== -->
+
+    <h2>
+        Waiting Time Prediction
+    </h2>
+
+
+    <p>
+
+        Predicted Waiting Time:
+
+        <strong id="selectedPrediction">
+            -
+        </strong>
+
+        minutes
+
+    </p>
+
+
+    <p>
+        The prediction is recalculated after updating
+        the queue.
+    </p>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     CHATBOT BUTTON
+     ========================================================= -->
+
+<button
+    class="chatbot-button"
+    onclick="toggleChatbot()"
+    title="Smart Queue Assistant">
+
+    🤖
+
+</button>
+
+
+
+<!-- =========================================================
+     CHATBOT WINDOW
+     ========================================================= -->
+
+<div
+    id="chatbotWindow"
+    class="chatbot-window">
+
+
+    <!-- HEADER -->
+
+    <div class="chatbot-header">
+
+
+        <div class="chatbot-title">
+
+
+            <div class="chatbot-icon">
+                🤖
+            </div>
+
+
+            <div class="chatbot-title-text">
+
+                <strong>
+                    Smart Queue Assistant
+                </strong>
+
+                <span>
+                    Project Help
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="chatbot-header-buttons">
+
+
+            <button
+                onclick="clearChat()"
+                title="Clear chat">
+
+                🗑️
+
+            </button>
+
+
+            <button
+                onclick="closeChatbot()"
+                title="Close">
+
+                ✕
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- MESSAGES -->
+
+    <div
+        id="chatbotMessages"
+        class="chatbot-messages">
+
+
+        <div class="chat-message bot-message">
+
+            Hello! 👋
+
+            I am your Smart Queue Project Assistant.
+
+            Ask me anything about the project, Machine Learning,
+            dataset, Random Forest, Flask, SQLite, APIs,
+            queue management, prediction, architecture,
+            workflow, or viva questions.
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- SUGGESTIONS -->
+
+    <div class="chatbot-suggestions">
+
+
+        <button
+            onclick="askSuggestedQuestion(
+                'What is this project?'
+            )">
+
+            Project
+
+        </button>
+
+
+        <button
+            onclick="askSuggestedQuestion(
+                'Why did you use Random Forest?'
+            )">
+
+            Random Forest
+
+        </button>
+
+
+        <button
+            onclick="askSuggestedQuestion(
+                'What are the dataset columns?'
+            )">
+
+            Dataset
+
+        </button>
+
+
+        <button
+            onclick="askSuggestedQuestion(
+                'Explain the project architecture'
+            )">
+
+            Architecture
+
+        </button>
+
+
+        <button
+            onclick="askSuggestedQuestion(
+                'Give me viva questions'
+            )">
+
+            Viva
+
+        </button>
+
+
+    </div>
+
+
+
+    <!-- INPUT -->
+
+    <div class="chatbot-input-area">
+
+
+        <input
+            id="chatbotInput"
+            class="chatbot-input"
+            type="text"
+            placeholder="Ask about your project..."
+            onkeydown="handleChatbotKey(event)"
+        >
+
+
+        <button
+            class="chatbot-send"
+            onclick="sendChatMessage()"
+            title="Send">
+
+            ➤
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     ADMIN JS
+     ========================================================= -->
+
+<script src="js/admin.js"></script>
+
+
+<!-- =========================================================
+     CHATBOT JS
+     ========================================================= -->
+
+<script src="js/chatbot.js"></script>
+
+
+</body>
+
+</html>
