@@ -5,22 +5,30 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Admin Dashboard</title>
-
-
-    <!-- EXISTING CSS -->
-
-    <link rel="stylesheet"
-          href="css/style.css">
+    <title>
+        Admin Dashboard - Smart Queue Predictor
+    </title>
 
 
-    <!-- CHATBOT CSS -->
+    <!-- Admin CSS -->
 
-    <link rel="stylesheet"
-          href="css/chatbot.css">
+    <link
+        rel="stylesheet"
+        href="css/admin.css"
+    >
+
+
+    <!-- Chatbot CSS -->
+
+    <link
+        rel="stylesheet"
+        href="css/chatbot.css"
+    >
 
 </head>
 
@@ -28,309 +36,496 @@
 <body>
 
 
-<div class="container">
-
-
     <!-- =====================================================
-         ADMIN DASHBOARD
+         MAIN CONTAINER
          ===================================================== -->
 
-    <h1>
-        Admin Dashboard
-    </h1>
+    <div class="container">
 
 
+        <!-- =================================================
+             HEADER
+             ================================================= -->
 
-    <!-- =====================================================
-         DASHBOARD SUMMARY
-         ===================================================== -->
-
-    <div class="dashboard-summary">
+        <h1>
+            Smart Queue Admin Dashboard
+        </h1>
 
 
         <p>
-            Total Users:
-            <strong id="users">0</strong>
+            Manage queues, monitor customers and
+            predict waiting times.
         </p>
 
 
-        <p>
-            Active Queues:
-            <strong id="queues">0</strong>
-        </p>
 
+        <!-- =================================================
+             STATISTICS
+             ================================================= -->
 
-        <p>
-            People Waiting:
-            <strong id="waiting">0</strong>
-        </p>
+        <div class="stats">
 
 
-        <p>
-            Average Predicted Waiting Time:
+            <!-- Total Users -->
 
-            <strong id="average">
-                0
-            </strong>
+            <div class="stat-card">
 
-            minutes
+                <h3>
+                    👥 Total Users
+                </h3>
 
-        </p>
+                <p id="users">
+                    0
+                </p>
 
-
-    </div>
-
-
-
-    <hr>
-
-
-
-    <!-- =====================================================
-         MANAGE QUEUE
-         ===================================================== -->
-
-    <h2>
-        Manage Queue
-    </h2>
-
-
-    <label>
-        Select Queue
-    </label>
-
-
-    <select
-        id="queueSelect"
-        onchange="loadQueueDetails()">
-
-        <option value="">
-            Select Queue
-        </option>
-
-    </select>
-
-
-
-    <h3>
-        Queue Information
-    </h3>
-
-
-
-    <input
-        id="queueName"
-        type="text"
-        placeholder="Queue Name"
-    >
-
-
-    <input
-        id="serviceType"
-        type="text"
-        placeholder="Service Type"
-    >
-
-
-    <input
-        id="activeCounters"
-        type="number"
-        min="1"
-        placeholder="Active Counters"
-    >
-
-
-    <input
-        id="averageServiceTime"
-        type="number"
-        min="1"
-        step="0.1"
-        placeholder="Average Service Time"
-    >
-
-
-    <input
-        id="arrivalRate"
-        type="number"
-        min="1"
-        step="0.1"
-        value="5"
-        placeholder="Arrival Rate"
-    >
-
-
-
-    <div>
-
-
-        <button
-            onclick="updateQueue()">
-
-            Update Queue
-
-        </button>
-
-
-        <button
-            onclick="serveNext()">
-
-            Serve Next Customer
-
-        </button>
-
-
-    </div>
-
-
-
-    <p id="message"></p>
-
-
-
-    <hr>
-
-
-
-    <!-- =====================================================
-         CURRENT QUEUE DETAILS
-         ===================================================== -->
-
-    <h2>
-        Current Queue Details
-    </h2>
-
-
-    <p>
-        Queue Name:
-
-        <strong id="currentQueueName">
-            -
-        </strong>
-    </p>
-
-
-    <p>
-        Service Type:
-
-        <strong id="currentServiceType">
-            -
-        </strong>
-    </p>
-
-
-    <p>
-        Active Counters:
-
-        <strong id="currentCounters">
-            -
-        </strong>
-    </p>
-
-
-    <p>
-        Average Service Time:
-
-        <strong id="currentServiceTime">
-            -
-        </strong>
-
-        minutes
-
-    </p>
-
-
-    <p>
-        People Waiting:
-
-        <strong id="currentPeopleWaiting">
-            -
-        </strong>
-    </p>
-
-
-
-    <hr>
-
-
-
-    <!-- =====================================================
-         PREDICTION
-         ===================================================== -->
-
-    <h2>
-        Waiting Time Prediction
-    </h2>
-
-
-    <p>
-
-        Predicted Waiting Time:
-
-        <strong id="selectedPrediction">
-            -
-        </strong>
-
-        minutes
-
-    </p>
-
-
-    <p>
-        The prediction is recalculated after updating
-        the queue.
-    </p>
-
-
-</div>
-
-
-
-<!-- =========================================================
-     CHATBOT BUTTON
-     ========================================================= -->
-
-<button
-    class="chatbot-button"
-    onclick="toggleChatbot()"
-    title="Smart Queue Assistant">
-
-    🤖
-
-</button>
-
-
-
-<!-- =========================================================
-     CHATBOT WINDOW
-     ========================================================= -->
-
-<div
-    id="chatbotWindow"
-    class="chatbot-window">
-
-
-    <!-- HEADER -->
-
-    <div class="chatbot-header">
-
-
-        <div class="chatbot-title">
-
-
-            <div class="chatbot-icon">
-                🤖
             </div>
 
 
-            <div class="chatbot-title-text">
+            <!-- Active Queues -->
+
+            <div class="stat-card">
+
+                <h3>
+                    🎫 Active Queues
+                </h3>
+
+                <p id="queues">
+                    0
+                </p>
+
+            </div>
+
+
+            <!-- People Waiting -->
+
+            <div class="stat-card">
+
+                <h3>
+                    👨‍👩‍👧 People Waiting
+                </h3>
+
+                <p id="waiting">
+                    0
+                </p>
+
+            </div>
+
+
+            <!-- Average Prediction -->
+
+            <div class="stat-card">
+
+                <h3>
+                    ⏱️ Average Waiting Time
+                </h3>
+
+                <p>
+
+                    <span id="average">
+                        0.00
+                    </span>
+
+                    min
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <hr>
+
+
+
+        <!-- =================================================
+             MANAGE QUEUE
+             ================================================= -->
+
+        <h2>
+            Manage Queue
+        </h2>
+
+
+        <!-- Queue Selection -->
+
+        <div class="queue-selection">
+
+            <label for="queueSelect">
+                Select Queue
+            </label>
+
+
+            <select id="queueSelect">
+
+                <option value="">
+                    Select Queue
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- =================================================
+             QUEUE INFORMATION
+             ================================================= -->
+
+        <div class="queue-info">
+
+
+            <h3>
+                Queue Information
+            </h3>
+
+
+            <!-- Queue Name -->
+
+            <label for="queueName">
+                Queue Name
+            </label>
+
+            <input
+                type="text"
+                id="queueName"
+                placeholder="Enter queue name"
+            >
+
+
+            <!-- Service Type -->
+
+            <label for="serviceType">
+                Service Type
+            </label>
+
+            <input
+                type="text"
+                id="serviceType"
+                placeholder="Enter service type"
+            >
+
+
+            <!-- Active Counters -->
+
+            <label for="activeCounters">
+                Active Counters
+            </label>
+
+            <input
+                type="number"
+                id="activeCounters"
+                min="1"
+                placeholder="Enter active counters"
+            >
+
+
+            <!-- Average Service Time -->
+
+            <label for="averageServiceTime">
+                Average Service Time
+            </label>
+
+            <input
+                type="number"
+                id="averageServiceTime"
+                min="0"
+                step="0.1"
+                placeholder="Enter service time"
+            >
+
+
+            <!-- =================================================
+                 PEOPLE WAITING - MANUAL INPUT
+                 ================================================= -->
+
+            <label for="peopleWaiting">
+                People Waiting
+            </label>
+
+
+            <input
+                type="number"
+                id="peopleWaiting"
+                min="0"
+                step="1"
+                placeholder="Enter number of people waiting"
+            >
+
+
+            <!-- Arrival Rate -->
+
+            <label for="arrivalRate">
+                Arrival Rate
+            </label>
+
+
+            <input
+                type="number"
+                id="arrivalRate"
+                min="0"
+                step="0.1"
+                value="5"
+                placeholder="Customers arriving"
+            >
+
+
+
+            <!-- =================================================
+                 BUTTONS
+                 ================================================= -->
+
+            <div class="queue-buttons">
+
+
+                <button
+                    type="button"
+                    onclick="updateQueue()"
+                >
+                    💾 Update Queue
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="serveNext()"
+                >
+                    🎫 Serve Next Customer
+                </button>
+
+
+            </div>
+
+
+
+            <!-- Message -->
+
+            <div id="message"></div>
+
+
+        </div>
+
+
+
+        <hr>
+
+
+
+        <!-- =================================================
+             CURRENT QUEUE DETAILS
+             ================================================= -->
+
+        <h2>
+            Current Queue Details
+        </h2>
+
+
+        <div class="current-details">
+
+
+            <p>
 
                 <strong>
-                    Smart Queue Assistant
+                    Queue Name:
                 </strong>
 
-                <span>
-                    Project Help
+                <span id="currentQueueName">
+                    -
                 </span>
+
+            </p>
+
+
+            <p>
+
+                <strong>
+                    Service Type:
+                </strong>
+
+                <span id="currentServiceType">
+                    -
+                </span>
+
+            </p>
+
+
+            <p>
+
+                <strong>
+                    Active Counters:
+                </strong>
+
+                <span id="currentCounters">
+                    -
+                </span>
+
+            </p>
+
+
+            <p>
+
+                <strong>
+                    Average Service Time:
+                </strong>
+
+                <span id="currentServiceTime">
+                    -
+                </span>
+
+                minutes
+
+            </p>
+
+
+            <p>
+
+                <strong>
+                    People Waiting:
+                </strong>
+
+                <span id="currentPeopleWaiting">
+                    -
+                </span>
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             WAITING TIME PREDICTION
+             ================================================= -->
+
+        <div class="prediction-section">
+
+
+            <h2>
+                🤖 Waiting Time Prediction
+            </h2>
+
+
+            <p>
+                Estimated waiting time for the selected queue
+            </p>
+
+
+            <div
+                id="selectedPrediction"
+                class="prediction-value"
+            >
+                0.00
+            </div>
+
+
+            <p>
+                minutes
+            </p>
+
+
+        </div>
+
+
+
+        <hr>
+
+
+
+        <!-- =================================================
+             LOGOUT
+             ================================================= -->
+
+        <div
+            style="
+                text-align: center;
+                margin-top: 30px;
+            "
+        >
+
+            <button
+                type="button"
+                onclick="logout()"
+            >
+                🚪 Logout
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CHATBOT BUTTON
+         ===================================================== -->
+
+    <button
+        class="chatbot-button"
+        onclick="toggleChatbot()"
+        title="Smart Queue Assistant"
+    >
+        🤖
+    </button>
+
+
+
+    <!-- =====================================================
+         CHATBOT WINDOW
+         ===================================================== -->
+
+    <div
+        id="chatbotWindow"
+        class="chatbot-window"
+    >
+
+
+        <!-- Chatbot Header -->
+
+        <div class="chatbot-header">
+
+
+            <div class="chatbot-title">
+
+                <div class="chatbot-icon">
+                    🤖
+                </div>
+
+
+                <div class="chatbot-title-text">
+
+                    <strong>
+                        Smart Queue Assistant
+                    </strong>
+
+                    <span>
+                        Project Help
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="chatbot-header-buttons">
+
+                <button
+                    type="button"
+                    onclick="clearChat()"
+                >
+                    🗑️
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="closeChatbot()"
+                >
+                    ✕
+                </button>
 
             </div>
 
@@ -339,161 +534,169 @@
 
 
 
-        <div class="chatbot-header-buttons">
+        <!-- Chat Messages -->
 
-
-            <button
-                onclick="clearChat()"
-                title="Clear chat">
-
-                🗑️
-
-            </button>
-
-
-            <button
-                onclick="closeChatbot()"
-                title="Close">
-
-                ✕
-
-            </button>
-
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- MESSAGES -->
-
-    <div
-        id="chatbotMessages"
-        class="chatbot-messages">
-
-
-        <div class="chat-message bot-message">
-
-            Hello! 👋
-
-            I am your Smart Queue Project Assistant.
-
-            Ask me anything about the project, Machine Learning,
-            dataset, Random Forest, Flask, SQLite, APIs,
-            queue management, prediction, architecture,
-            workflow, or viva questions.
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- SUGGESTIONS -->
-
-    <div class="chatbot-suggestions">
-
-
-        <button
-            onclick="askSuggestedQuestion(
-                'What is this project?'
-            )">
-
-            Project
-
-        </button>
-
-
-        <button
-            onclick="askSuggestedQuestion(
-                'Why did you use Random Forest?'
-            )">
-
-            Random Forest
-
-        </button>
-
-
-        <button
-            onclick="askSuggestedQuestion(
-                'What are the dataset columns?'
-            )">
-
-            Dataset
-
-        </button>
-
-
-        <button
-            onclick="askSuggestedQuestion(
-                'Explain the project architecture'
-            )">
-
-            Architecture
-
-        </button>
-
-
-        <button
-            onclick="askSuggestedQuestion(
-                'Give me viva questions'
-            )">
-
-            Viva
-
-        </button>
-
-
-    </div>
-
-
-
-    <!-- INPUT -->
-
-    <div class="chatbot-input-area">
-
-
-        <input
-            id="chatbotInput"
-            class="chatbot-input"
-            type="text"
-            placeholder="Ask about your project..."
-            onkeydown="handleChatbotKey(event)"
+        <div
+            id="chatbotMessages"
+            class="chatbot-messages"
         >
 
+            <div
+                class="chat-message bot-message"
+            >
 
-        <button
-            class="chatbot-send"
-            onclick="sendChatMessage()"
-            title="Send">
+                Hello! 👋
 
-            ➤
+                I am your Smart Queue Project
+                Assistant. 🤖
 
-        </button>
+                Ask me about:
+
+                • Smart Queue Management
+                • Machine Learning
+                • Random Forest
+                • Flask
+                • SQLite
+                • APIs
+                • Dataset
+                • Architecture
+                • Modules
+                • Viva Questions
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Suggestions -->
+
+        <div class="chatbot-suggestions">
+
+
+            <button
+                type="button"
+                onclick="askSuggestedQuestion('What is this project?')"
+            >
+                Project
+            </button>
+
+
+            <button
+                type="button"
+                onclick="askSuggestedQuestion('Explain the folder structure')"
+            >
+                Folder Structure
+            </button>
+
+
+            <button
+                type="button"
+                onclick="askSuggestedQuestion('Explain every module in the project')"
+            >
+                Modules
+            </button>
+
+
+            <button
+                type="button"
+                onclick="askSuggestedQuestion('What ML algorithm does this project use?')"
+            >
+                ML Algorithm
+            </button>
+
+
+            <button
+                type="button"
+                onclick="askSuggestedQuestion('Explain Random Forest')"
+            >
+                Random Forest
+            </button>
+
+
+            <button
+                type="button"
+                onclick="askSuggestedQuestion('What are the dataset columns?')"
+            >
+                Dataset
+            </button>
+
+
+            <button
+                type="button"
+                onclick="askSuggestedQuestion('Explain the architecture')"
+            >
+                Architecture
+            </button>
+
+
+            <button
+                type="button"
+                onclick="askSuggestedQuestion('Give me viva questions')"
+            >
+                Viva
+            </button>
+
+
+        </div>
+
+
+
+        <!-- Chat Input -->
+
+        <div class="chatbot-input-area">
+
+
+            <input
+                id="chatbotInput"
+                class="chatbot-input"
+                type="text"
+                placeholder="Ask about your project..."
+                onkeydown="handleChatbotKey(event)"
+            >
+
+
+            <button
+                type="button"
+                class="chatbot-send"
+                onclick="sendChatMessage()"
+            >
+                ➤
+            </button>
+
+
+        </div>
 
 
     </div>
 
 
-</div>
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script src="js/admin.js"></script>
+
+    <script src="js/chatbot.js"></script>
 
 
+    <!-- =====================================================
+         LOGOUT
+         ===================================================== -->
 
-<!-- =========================================================
-     ADMIN JS
-     ========================================================= -->
+    <script>
 
-<script src="js/admin.js"></script>
+        function logout() {
 
+            localStorage.removeItem("user");
 
-<!-- =========================================================
-     CHATBOT JS
-     ========================================================= -->
+            window.location.href =
+                "login.html";
 
-<script src="js/chatbot.js"></script>
+        }
+
+    </script>
 
 
 </body>

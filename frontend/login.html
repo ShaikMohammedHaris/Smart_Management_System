@@ -10,9 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        Smart Queue Predictor - Login
-    </title>
+    <title>Login - Smart Queue Predictor</title>
 
     <link
         rel="stylesheet"
@@ -21,123 +19,62 @@
 
 </head>
 
-
 <body>
-
-
-    <!-- =====================================================
-         LOGIN CARD
-         ===================================================== -->
 
     <div class="login-container">
 
-
-        <!-- LOGO -->
-
-        <div class="login-logo">
-
-            <img
-                src="images/logo.png"
-                alt="Smart Queue Predictor Logo"
-            >
-
-        </div>
-
-
-        <!-- TITLE -->
+        <img
+            src="images/logo.png"
+            alt="Smart Queue Predictor Logo"
+            class="login-logo"
+        >
 
         <h1>
             Welcome Back
         </h1>
 
-
-        <p class="login-subtitle">
+        <p>
             Login to your Smart Queue account
         </p>
 
-
-        <!-- =================================================
-             LOGIN FORM
-             ================================================= -->
-
         <form id="loginForm">
 
+            <label for="email">
+                Email Address
+            </label>
 
-            <!-- EMAIL -->
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
 
-            <div class="form-group">
+            <label for="password">
+                Password
+            </label>
 
-                <label for="email">
-                    Email Address
-                </label>
-
-                <div class="input-wrapper">
-
-                    <span class="input-icon">
-                        ✉
-                    </span>
-
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="Enter your email"
-                        required
-                    >
-
-                </div>
-
-            </div>
-
-
-            <!-- PASSWORD -->
-
-            <div class="form-group">
-
-                <label for="password">
-                    Password
-                </label>
-
-                <div class="input-wrapper">
-
-                    <span class="input-icon">
-                        🔒
-                    </span>
-
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Enter your password"
-                        required
-                    >
-
-                </div>
-
-            </div>
-
-
-            <!-- LOGIN BUTTON -->
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
 
             <button
                 type="submit"
-                class="login-button"
+                id="loginButton"
             >
-
                 Login
-
             </button>
 
+            <div id="message"></div>
 
         </form>
 
-
-        <!-- MESSAGE -->
-
-        <div id="message"></div>
-
-
-        <!-- REGISTER -->
-
-        <p class="register-text">
+        <div class="create-account">
 
             Don't have an account?
 
@@ -145,38 +82,17 @@
                 Create account
             </a>
 
-        </p>
+        </div>
 
+        <div class="create-account">
 
-        <!-- HOME -->
-
-        <a
-            href="index.html"
-            class="home-link"
-        >
-
-            ← Back to Home
-
-        </a>
-
-
-        <!-- FOOTER -->
-
-        <div class="login-footer">
-
-            Smart Queue Predictor
-
-            <br>
-
-            Smarter Queues • Shorter Waits
+            <a href="index.html">
+                ← Back to Home
+            </a>
 
         </div>
 
-
     </div>
-
-
-    <!-- JAVASCRIPT -->
 
     <script src="js/login.js"></script>
 

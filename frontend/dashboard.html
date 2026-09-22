@@ -11,16 +11,18 @@
     >
 
     <title>
-        Smart Queue - User Dashboard
+        User Dashboard - Smart Queue Predictor
     </title>
 
-    <!-- Main CSS -->
+
+    <!-- DASHBOARD CSS -->
     <link
         rel="stylesheet"
-        href="css/style.css"
+        href="css/dashboard.css"
     >
 
-    <!-- Chatbot CSS -->
+
+    <!-- CHATBOT CSS -->
     <link
         rel="stylesheet"
         href="css/chatbot.css"
@@ -32,638 +34,444 @@
 <body>
 
 
-    <!-- ===================================================== -->
-    <!-- MAIN USER DASHBOARD -->
-    <!-- ===================================================== -->
+<!-- =========================================================
+     MAIN DASHBOARD
+========================================================= -->
 
-    <div class="container">
-
-        <h1>
-            Smart Queue Management System
-        </h1>
+<div class="container">
 
 
-        <p id="welcome">
-            Welcome
+    <!-- HEADER -->
+
+    <div class="dashboard-header">
+
+        <div>
+
+            <h1>
+                Smart Queue Management System
+            </h1>
+
+            <p id="welcome">
+                Welcome to Smart Queue Predictor
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         JOIN QUEUE
+    ====================================================== -->
+
+    <section class="dashboard-card">
+
+        <h2>
+            🎫 Join Queue
+        </h2>
+
+        <p>
+            Enter the queue ID to join a queue.
         </p>
 
 
-        <!-- ================================================= -->
-        <!-- JOIN QUEUE -->
-        <!-- ================================================= -->
-
-        <h2>
-            Join Queue
-        </h2>
-
-
-        <input
-            id="queueId"
-            type="number"
-            placeholder="Enter Queue ID"
-        >
-
-
-        <button
-            onclick="joinQueue()"
-        >
-            Join Queue
-        </button>
-
-
-        <!-- ================================================= -->
-        <!-- YOUR TOKEN -->
-        <!-- ================================================= -->
-
-        <h2>
-            Your Token
-        </h2>
-
-
-        <div id="token">
-            -
-        </div>
-
-
-        <!-- ================================================= -->
-        <!-- WAITING TIME PREDICTION -->
-        <!-- ================================================= -->
-
-        <h2>
-            Waiting Time Prediction
-        </h2>
-
-
-        <input
-            id="queueLength"
-            type="number"
-            placeholder="Queue Length"
-        >
-
-
-        <input
-            id="counters"
-            type="number"
-            placeholder="Active Counters"
-        >
-
-
-        <input
-            id="serviceTime"
-            type="number"
-            placeholder="Average Service Time"
-        >
-
-
-        <input
-            id="arrivalRate"
-            type="number"
-            placeholder="Arrival Rate"
-        >
-
-
-        <button
-            onclick="predictTime()"
-        >
-            Predict Waiting Time
-        </button>
-
-
-        <h2 id="prediction">
-            -
-        </h2>
-
-    </div>
-
-
-
-    <!-- ===================================================== -->
-    <!-- CHATBOT FLOATING BUTTON -->
-    <!-- ===================================================== -->
-
-    <button
-        class="chatbot-button"
-        onclick="toggleChatbot()"
-        title="Smart Queue Assistant"
-    >
-
-        🤖
-
-    </button>
-
-
-
-    <!-- ===================================================== -->
-    <!-- CHATBOT WINDOW -->
-    <!-- ===================================================== -->
-
-    <div
-        id="chatbotWindow"
-        class="chatbot-window"
-    >
-
-
-        <!-- ================================================= -->
-        <!-- CHATBOT HEADER -->
-        <!-- ================================================= -->
-
-        <div class="chatbot-header">
-
-
-            <div class="chatbot-title">
-
-
-                <div class="chatbot-icon">
-                    🤖
-                </div>
-
-
-                <div class="chatbot-title-text">
-
-                    <strong>
-                        Smart Queue Assistant
-                    </strong>
-
-                    <span>
-                        Project Help
-                    </span>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- CHATBOT HEADER BUTTONS -->
-
-            <div class="chatbot-header-buttons">
-
-
-                <!-- Clear Chat -->
-
-                <button
-                    onclick="clearChat()"
-                    title="Clear Chat"
-                >
-                    🗑️
-                </button>
-
-
-                <!-- Close Chat -->
-
-                <button
-                    onclick="closeChatbot()"
-                    title="Close Chat"
-                >
-                    ✕
-                </button>
-
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- ================================================= -->
-        <!-- CHATBOT MESSAGES -->
-        <!-- ================================================= -->
-
-        <div
-            id="chatbotMessages"
-            class="chatbot-messages"
-        >
-
-
-            <!-- Initial Bot Message -->
-
-            <div
-                class="chat-message bot-message"
-            >
-
-                Hello! 👋
-
-                I am your Smart Queue Project Assistant. 🤖
-
-                I can explain your project, folder structure,
-                modules, Machine Learning, Random Forest,
-                dataset, Flask, SQLite, APIs, architecture,
-                workflow, prediction logic and viva questions.
-
-                Ask me anything about your project.
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- ================================================= -->
-        <!-- CHATBOT SUGGESTED QUESTIONS -->
-        <!-- ================================================= -->
-
-        <div class="chatbot-suggestions">
-
-
-            <!-- ================================================= -->
-            <!-- PROJECT -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What is this project?'
-                )"
-            >
-                Project
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- OBJECTIVE -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What is the objective of this project?'
-                )"
-            >
-                Objective
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- FOLDER STRUCTURE -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'Explain the folder structure'
-                )"
-            >
-                Folder Structure
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- ALL MODULES -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'Explain every module in the project'
-                )"
-            >
-                All Modules
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- CODE MODULES -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'Explain code of every module'
-                )"
-            >
-                Code Modules
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- ML ALGORITHM -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What ML algorithm does this project use?'
-                )"
-            >
-                ML Algorithm
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- RANDOM FOREST -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'Explain Random Forest'
-                )"
-            >
-                Random Forest
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- WHY RANDOM FOREST -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'Why did you choose Random Forest?'
-                )"
-            >
-                Why Random Forest
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- INPUT FEATURES -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What are the input features?'
-                )"
-            >
-                Input Features
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- TARGET VARIABLE -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What is the target variable?'
-                )"
-            >
-                Target Variable
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- PREDICTION LOGIC -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What logic is performed to predict waiting time?'
-                )"
-            >
-                Prediction Logic
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- DATASET -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What are the dataset columns?'
-                )"
-            >
-                Dataset
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- DATASET PREPARATION -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'How is the dataset prepared?'
-                )"
-            >
-                Dataset Preparation
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- MODEL TRAINING -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'How is the model trained?'
-                )"
-            >
-                Model Training
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- MAE -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What is MAE?'
-                )"
-            >
-                MAE
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- R2 SCORE -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What is R2 Score?'
-                )"
-            >
-                R² Score
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- ARCHITECTURE -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'Explain the architecture'
-                )"
-            >
-                Architecture
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- WORKFLOW -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'Explain the workflow'
-                )"
-            >
-                Workflow
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- FLASK -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What is Flask?'
-                )"
-            >
-                Flask
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- DATABASE -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What database is used?'
-                )"
-            >
-                Database
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- DATABASE TABLES -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What are the database tables?'
-                )"
-            >
-                Database Tables
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- API -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What is an API?'
-                )"
-            >
-                API
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- TOKEN -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'How is a token generated?'
-                )"
-            >
-                Token Generation
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- TECHNOLOGIES -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What technologies are used?'
-                )"
-            >
-                Technologies
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- ADVANTAGES -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What are the advantages of the project?'
-                )"
-            >
-                Advantages
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- LIMITATIONS -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What are the limitations of the project?'
-                )"
-            >
-                Limitations
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- FUTURE SCOPE -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What is the future scope?'
-                )"
-            >
-                Future Scope
-            </button>
-
-
-            <!-- ================================================= -->
-            <!-- VIVA -->
-            <!-- ================================================= -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'Give me viva questions'
-                )"
-            >
-                Viva Questions
-            </button>
-
-
-        </div>
-
-
-
-        <!-- ================================================= -->
-        <!-- CHATBOT INPUT AREA -->
-        <!-- ================================================= -->
-
-        <div class="chatbot-input-area">
-
-
-            <!-- Question Input -->
+        <div class="form-group">
+
+            <label for="queueId">
+                Queue ID
+            </label>
 
             <input
-                id="chatbotInput"
-                class="chatbot-input"
-                type="text"
-                placeholder="Ask about your project..."
-                onkeydown="handleChatbotKey(event)"
+                type="number"
+                id="queueId"
+                placeholder="Enter Queue ID"
+                min="1"
             >
 
+        </div>
 
-            <!-- Send Button -->
+
+        <button
+            type="button"
+            onclick="joinQueue()"
+        >
+            🎫 Join Queue
+        </button>
+
+
+        <div
+            id="joinMessage"
+            class="message"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         YOUR TOKEN
+    ====================================================== -->
+
+    <section class="dashboard-card">
+
+        <h2>
+            🎟️ Your Token
+        </h2>
+
+        <div
+            id="token"
+            class="token-display"
+        >
+            -
+        </div>
+
+        <p>
+            Your token number will appear here
+            after joining a queue.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         QUEUE INFORMATION
+    ====================================================== -->
+
+    <section class="dashboard-card">
+
+        <h2>
+            📋 Queue Information
+        </h2>
+
+
+        <div class="info-grid">
+
+
+            <div class="info-box">
+
+                <span>
+                    Queue Name
+                </span>
+
+                <strong id="userQueueName">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    Service Type
+                </span>
+
+                <strong id="userServiceType">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    People Waiting
+                </span>
+
+                <strong id="userPeopleWaiting">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    People Ahead
+                </span>
+
+                <strong id="userPeopleAhead">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    Queue Position
+                </span>
+
+                <strong id="userPosition">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    Queue Status
+                </span>
+
+                <strong id="userQueueStatus">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    Active Counters
+                </span>
+
+                <strong id="userActiveCounters">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    Average Service Time
+                </span>
+
+                <strong id="userAverageServiceTime">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         WAITING TIME PREDICTION
+    ====================================================== -->
+
+    <section class="dashboard-card">
+
+        <h2>
+            🤖 Waiting Time Prediction
+        </h2>
+
+
+        <div class="prediction-inputs">
+
+
+            <div class="form-group">
+
+                <label for="queueLength">
+                    Queue Length
+                </label>
+
+                <input
+                    type="number"
+                    id="queueLength"
+                    placeholder="Queue Length"
+                    min="0"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="counters">
+                    Active Counters
+                </label>
+
+                <input
+                    type="number"
+                    id="counters"
+                    placeholder="Active Counters"
+                    min="1"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="serviceTime">
+                    Average Service Time
+                </label>
+
+                <input
+                    type="number"
+                    id="serviceTime"
+                    placeholder="Average Service Time"
+                    min="0"
+                    step="0.1"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="arrivalRate">
+                    Arrival Rate
+                </label>
+
+                <input
+                    type="number"
+                    id="arrivalRate"
+                    placeholder="Arrival Rate"
+                    min="0"
+                    step="0.1"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            onclick="predictTime()"
+        >
+            🤖 Predict Waiting Time
+        </button>
+
+
+        <div class="prediction-result">
+
+            <h3>
+                Predicted Waiting Time
+            </h3>
+
+            <div
+                id="prediction"
+                class="prediction-value"
+            >
+                -
+            </div>
+
+            <span>
+                minutes
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         REFRESH BUTTON
+    ====================================================== -->
+
+    <section class="dashboard-actions">
+
+        <button
+            type="button"
+            onclick="loadUserQueue()"
+        >
+            🔄 Refresh Queue
+        </button>
+
+        <button
+            type="button"
+            onclick="logout()"
+        >
+            🚪 Logout
+        </button>
+
+    </section>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     SMART QUEUE ASSISTANT
+========================================================= -->
+
+
+<!-- CHATBOT FLOATING BUTTON -->
+
+<button
+    class="chatbot-button"
+    onclick="toggleChatbot()"
+    title="Smart Queue Assistant"
+>
+    🤖
+</button>
+
+
+
+<!-- CHATBOT WINDOW -->
+
+<div
+    id="chatbotWindow"
+    class="chatbot-window"
+>
+
+
+    <!-- =====================================================
+         CHATBOT HEADER
+    ====================================================== -->
+
+    <div class="chatbot-header">
+
+
+        <div class="chatbot-title">
+
+
+            <div class="chatbot-icon">
+                🤖
+            </div>
+
+
+            <div class="chatbot-title-text">
+
+                <strong>
+                    Smart Queue Assistant
+                </strong>
+
+                <span>
+                    Customer Support
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="chatbot-header-buttons">
+
 
             <button
-                class="chatbot-send"
-                onclick="sendChatMessage()"
-                title="Send"
+                type="button"
+                onclick="clearChat()"
+                title="Clear Chat"
             >
+                🗑️
+            </button>
 
-                ➤
 
+            <button
+                type="button"
+                onclick="closeChatbot()"
+                title="Close"
+            >
+                ✕
             </button>
 
 
@@ -674,22 +482,190 @@
 
 
 
-    <!-- ===================================================== -->
-    <!-- JAVASCRIPT FILES -->
-    <!-- ===================================================== -->
+    <!-- =====================================================
+         CHAT MESSAGES
+    ====================================================== -->
 
-    <!-- User Dashboard JavaScript -->
+    <div
+        id="chatbotMessages"
+        class="chatbot-messages"
+    >
 
-    <script
-        src="js/dashboard.js"
-    ></script>
+        <div class="chat-message bot-message">
+
+            Hello! 👋
+
+            I am your Smart Queue Assistant. 🤖
+
+            I can help you with your current queue.
+
+            You can ask me about:
+
+            🎫 Your token number
+
+            👥 People waiting
+
+            👤 People ahead of you
+
+            🔢 Your queue position
+
+            ⏱️ Estimated waiting time
+
+            📋 Your queue
+
+            🛎️ Service type
+
+            🏢 Active counters
+
+            📍 Queue status
+
+        </div>
+
+    </div>
 
 
-    <!-- Chatbot JavaScript -->
 
-    <script
-        src="js/chatbot.js"
-    ></script>
+    <!-- =====================================================
+         SUGGESTED QUESTIONS
+    ====================================================== -->
+
+    <div class="chatbot-suggestions">
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('What is my token?')"
+        >
+            🎫 My Token
+        </button>
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('How many people are waiting?')"
+        >
+            👥 People Waiting
+        </button>
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('How many people are ahead of me?')"
+        >
+            👤 People Ahead
+        </button>
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('What is my position?')"
+        >
+            🔢 My Position
+        </button>
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('How long do I need to wait?')"
+        >
+            ⏱️ Waiting Time
+        </button>
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('Which queue am I in?')"
+        >
+            📋 My Queue
+        </button>
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('What service am I waiting for?')"
+        >
+            🛎️ Service
+        </button>
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('How many counters are active?')"
+        >
+            🏢 Counters
+        </button>
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('What is my queue status?')"
+        >
+            📍 Status
+        </button>
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('Is my turn near?')"
+        >
+            🔔 My Turn
+        </button>
+
+
+        <button
+            type="button"
+            onclick="askSuggestedQuestion('Help')"
+        >
+            ❓ Help
+        </button>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CHAT INPUT
+    ====================================================== -->
+
+    <div class="chatbot-input-area">
+
+
+        <input
+            id="chatbotInput"
+            class="chatbot-input"
+            type="text"
+            placeholder="Ask about your queue..."
+            autocomplete="off"
+            onkeydown="handleChatbotKey(event)"
+        >
+
+
+        <button
+            type="button"
+            class="chatbot-send"
+            onclick="sendChatMessage()"
+            title="Send"
+        >
+            ➤
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+
+<script src="js/dashboard.js"></script>
+
+<script src="js/chatbot.js"></script>
 
 
 </body>
