@@ -1,39 +1,549 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
-    <title>Smart Queue Management</title>
+    <meta charset="UTF-8">
 
-    <link rel="stylesheet"
-          href="css/style.css">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Smart Queue Predictor</title>
+
+
+    <style>
+
+        /* ==============================
+           RESET
+        ============================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        /* ==============================
+           BODY
+        ============================== */
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #dbeafe,
+                    #f5f3ff
+                );
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 30px 15px;
+        }
+
+
+        /* ==============================
+           MAIN CARD
+        ============================== */
+
+        .home-container {
+
+            width: 100%;
+
+            max-width: 760px;
+
+            background: white;
+
+            padding: 40px 50px;
+
+            border-radius: 25px;
+
+            text-align: center;
+
+            box-shadow:
+                0 20px 50px
+                rgba(0, 0, 0, 0.15);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        /* ==============================
+           TOP LINE
+        ============================== */
+
+        .home-container::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 6px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #2563eb,
+                    #4f46e5,
+                    #7c3aed
+                );
+        }
+
+
+        /* ==============================
+           PROJECT LOGO
+        ============================== */
+
+        .project-logo {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+
+        .project-logo img {
+
+            width: 250px;
+
+            height: 250px;
+
+            object-fit: contain;
+
+            display: block;
+
+            filter:
+                drop-shadow(
+                    0 8px 18px
+                    rgba(37, 99, 235, 0.20)
+                );
+
+            transition:
+                transform 0.3s ease;
+        }
+
+
+        .project-logo img:hover {
+
+            transform: scale(1.05);
+        }
+
+
+        /* ==============================
+           TITLE
+        ============================== */
+
+        h1 {
+
+            color: #172554;
+
+            font-size: 38px;
+
+            font-weight: 750;
+
+            margin-bottom: 12px;
+        }
+
+
+        /* ==============================
+           SUBTITLE
+        ============================== */
+
+        .subtitle {
+
+            color: #64748b;
+
+            font-size: 18px;
+
+            margin-bottom: 15px;
+        }
+
+
+        /* ==============================
+           DESCRIPTION
+        ============================== */
+
+        .description {
+
+            max-width: 580px;
+
+            margin: 0 auto 25px;
+
+            color: #64748b;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+        }
+
+
+        /* ==============================
+           TECHNOLOGIES
+        ============================== */
+
+        .technologies {
+
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .technology {
+
+            padding:
+                8px 14px;
+
+            border-radius: 20px;
+
+            background: #eff6ff;
+
+            border:
+                1px solid #dbeafe;
+
+            color: #2563eb;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        /* ==============================
+           BUTTONS
+        ============================== */
+
+        .home-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+        }
+
+
+        .home-button {
+
+            display: inline-block;
+
+            min-width: 150px;
+
+            padding:
+                14px 25px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #4f46e5
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 8px 20px
+                rgba(37, 99, 235, 0.25);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+
+        .home-button:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(37, 99, 235, 0.35);
+        }
+
+
+        /* ==============================
+           REGISTER BUTTON
+        ============================== */
+
+        .register-button {
+
+            background: white;
+
+            color: #2563eb;
+
+            border:
+                2px solid #2563eb;
+
+            box-shadow: none;
+        }
+
+
+        .register-button:hover {
+
+            background: #eff6ff;
+
+            box-shadow: none;
+        }
+
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        .footer {
+
+            margin-top: 30px;
+
+            padding-top: 18px;
+
+            border-top:
+                1px solid #e5e7eb;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+        }
+
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 600px) {
+
+            body {
+
+                padding: 20px 10px;
+            }
+
+
+            .home-container {
+
+                padding:
+                    35px 20px;
+            }
+
+
+            .project-logo img {
+
+                width: 190px;
+
+                height: 190px;
+            }
+
+
+            h1 {
+
+                font-size: 29px;
+            }
+
+
+            .subtitle {
+
+                font-size: 16px;
+            }
+
+
+            .home-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+            }
+
+
+            .home-button {
+
+                width: 100%;
+
+                max-width: 300px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-    <div class="container">
 
-        <h1>
-            Smart Queue Management
-        </h1>
+    <!-- =================================================
+         MAIN HOME CONTAINER
+    ================================================== -->
 
-        <p>
-            Waiting Time Prediction System
-        </p>
+    <div class="home-container">
 
-        <div class="buttons">
 
-            <a href="login.html">
-                Login
-            </a>
+        <!-- =================================================
+             PROJECT LOGO
 
-            <a href="register.html">
-                Register
-            </a>
+             YOUR IMAGE CODE GOES HERE
+        ================================================== -->
+
+        <div class="project-logo">
+
+            <img
+                src="images/logo.png"
+                alt="Smart Queue Predictor Logo"
+            >
 
         </div>
 
+
+        <!-- =================================================
+             PROJECT TITLE
+        ================================================== -->
+
+        <h1>
+            Smart Queue Predictor
+        </h1>
+
+
+        <!-- =================================================
+             SUBTITLE
+        ================================================== -->
+
+        <p class="subtitle">
+
+            Smart Queue Management &
+            Waiting Time Prediction System
+
+        </p>
+
+
+        <!-- =================================================
+             DESCRIPTION
+        ================================================== -->
+
+        <p class="description">
+
+            An intelligent web-based system that manages
+            customer queues and uses Machine Learning
+            to predict waiting time.
+
+        </p>
+
+
+        <!-- =================================================
+             TECHNOLOGIES
+        ================================================== -->
+
+        <div class="technologies">
+
+            <span class="technology">
+                Python
+            </span>
+
+            <span class="technology">
+                Flask
+            </span>
+
+            <span class="technology">
+                Machine Learning
+            </span>
+
+            <span class="technology">
+                Random Forest
+            </span>
+
+            <span class="technology">
+                SQLite
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             BUTTONS
+        ================================================== -->
+
+        <div class="home-buttons">
+
+
+            <a
+                href="login.html"
+                class="home-button"
+            >
+                Login
+            </a>
+
+
+            <a
+                href="register.html"
+                class="home-button register-button"
+            >
+                Register
+            </a>
+
+
+        </div>
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <div class="footer">
+
+            <div>
+                Smarter Queues • Shorter Waits
+            </div>
+
+            <div>
+                Machine Learning Based Waiting Time Prediction
+            </div>
+
+        </div>
+
+
     </div>
 
+
 </body>
+
 </html>

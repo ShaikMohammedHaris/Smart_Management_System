@@ -1,46 +1,185 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-    <title>Login</title>
+    <meta charset="UTF-8">
 
-    <link rel="stylesheet"
-          href="css/style.css">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Smart Queue Predictor - Login
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/login.css"
+    >
 
 </head>
 
+
 <body>
 
-<div class="container">
 
-    <h2>Login</h2>
+    <!-- =====================================================
+         LOGIN CARD
+         ===================================================== -->
 
-    <input
-        id="email"
-        type="email"
-        placeholder="Email"
-    >
+    <div class="login-container">
 
-    <input
-        id="password"
-        type="password"
-        placeholder="Password"
-    >
 
-    <button onclick="login()">
-        Login
-    </button>
+        <!-- LOGO -->
 
-    <p id="message"></p>
+        <div class="login-logo">
 
-    <a href="register.html">
-        Create account
-    </a>
+            <img
+                src="images/logo.png"
+                alt="Smart Queue Predictor Logo"
+            >
 
-</div>
+        </div>
 
-<script src="js/login.js"></script>
+
+        <!-- TITLE -->
+
+        <h1>
+            Welcome Back
+        </h1>
+
+
+        <p class="login-subtitle">
+            Login to your Smart Queue account
+        </p>
+
+
+        <!-- =================================================
+             LOGIN FORM
+             ================================================= -->
+
+        <form id="loginForm">
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        ✉
+                    </span>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+                        🔒
+                    </span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+
+                Login
+
+            </button>
+
+
+        </form>
+
+
+        <!-- MESSAGE -->
+
+        <div id="message"></div>
+
+
+        <!-- REGISTER -->
+
+        <p class="register-text">
+
+            Don't have an account?
+
+            <a href="register.html">
+                Create account
+            </a>
+
+        </p>
+
+
+        <!-- HOME -->
+
+        <a
+            href="index.html"
+            class="home-link"
+        >
+
+            ← Back to Home
+
+        </a>
+
+
+        <!-- FOOTER -->
+
+        <div class="login-footer">
+
+            Smart Queue Predictor
+
+            <br>
+
+            Smarter Queues • Shorter Waits
+
+        </div>
+
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/login.js"></script>
 
 </body>
+
 </html>

@@ -5,24 +5,22 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>
         Smart Queue - User Dashboard
     </title>
 
-
-    <!-- Main Website CSS -->
-
+    <!-- Main CSS -->
     <link
         rel="stylesheet"
         href="css/style.css"
     >
 
-
     <!-- Chatbot CSS -->
-
     <link
         rel="stylesheet"
         href="css/chatbot.css"
@@ -34,12 +32,11 @@
 <body>
 
 
-    <!-- =====================================================
-         MAIN DASHBOARD
-         ===================================================== -->
+    <!-- ===================================================== -->
+    <!-- MAIN USER DASHBOARD -->
+    <!-- ===================================================== -->
 
     <div class="container">
-
 
         <h1>
             Smart Queue Management System
@@ -51,10 +48,9 @@
         </p>
 
 
-
-        <!-- =================================================
-             JOIN QUEUE
-             ================================================= -->
+        <!-- ================================================= -->
+        <!-- JOIN QUEUE -->
+        <!-- ================================================= -->
 
         <h2>
             Join Queue
@@ -75,10 +71,9 @@
         </button>
 
 
-
-        <!-- =================================================
-             TOKEN
-             ================================================= -->
+        <!-- ================================================= -->
+        <!-- YOUR TOKEN -->
+        <!-- ================================================= -->
 
         <h2>
             Your Token
@@ -90,10 +85,9 @@
         </div>
 
 
-
-        <!-- =================================================
-             WAITING TIME PREDICTION
-             ================================================= -->
+        <!-- ================================================= -->
+        <!-- WAITING TIME PREDICTION -->
+        <!-- ================================================= -->
 
         <h2>
             Waiting Time Prediction
@@ -139,14 +133,13 @@
             -
         </h2>
 
-
     </div>
 
 
 
-    <!-- =====================================================
-         CHATBOT FLOATING BUTTON
-         ===================================================== -->
+    <!-- ===================================================== -->
+    <!-- CHATBOT FLOATING BUTTON -->
+    <!-- ===================================================== -->
 
     <button
         class="chatbot-button"
@@ -160,9 +153,9 @@
 
 
 
-    <!-- =====================================================
-         CHATBOT WINDOW
-         ===================================================== -->
+    <!-- ===================================================== -->
+    <!-- CHATBOT WINDOW -->
+    <!-- ===================================================== -->
 
     <div
         id="chatbotWindow"
@@ -170,9 +163,9 @@
     >
 
 
-        <!-- =================================================
-             CHATBOT HEADER
-             ================================================= -->
+        <!-- ================================================= -->
+        <!-- CHATBOT HEADER -->
+        <!-- ================================================= -->
 
         <div class="chatbot-header">
 
@@ -202,31 +195,28 @@
 
 
 
+            <!-- CHATBOT HEADER BUTTONS -->
+
             <div class="chatbot-header-buttons">
 
 
-                <!-- Clear -->
+                <!-- Clear Chat -->
 
                 <button
                     onclick="clearChat()"
                     title="Clear Chat"
                 >
-
                     🗑️
-
                 </button>
 
 
-
-                <!-- Close -->
+                <!-- Close Chat -->
 
                 <button
                     onclick="closeChatbot()"
                     title="Close Chat"
                 >
-
                     ✕
-
                 </button>
 
 
@@ -237,9 +227,9 @@
 
 
 
-        <!-- =================================================
-             CHATBOT MESSAGES
-             ================================================= -->
+        <!-- ================================================= -->
+        <!-- CHATBOT MESSAGES -->
+        <!-- ================================================= -->
 
         <div
             id="chatbotMessages"
@@ -247,7 +237,7 @@
         >
 
 
-            <!-- Initial chatbot message -->
+            <!-- Initial Bot Message -->
 
             <div
                 class="chat-message bot-message"
@@ -255,12 +245,12 @@
 
                 Hello! 👋
 
-                I am your Smart Queue Project Assistant.
+                I am your Smart Queue Project Assistant. 🤖
 
                 I can explain your project, folder structure,
                 modules, Machine Learning, Random Forest,
                 dataset, Flask, SQLite, APIs, architecture,
-                workflow and viva questions.
+                workflow, prediction logic and viva questions.
 
                 Ask me anything about your project.
 
@@ -271,107 +261,374 @@
 
 
 
-        <!-- =================================================
-             SUGGESTED QUESTIONS
-             ================================================= -->
+        <!-- ================================================= -->
+        <!-- CHATBOT SUGGESTED QUESTIONS -->
+        <!-- ================================================= -->
 
         <div class="chatbot-suggestions">
 
 
-            <!-- Project -->
+            <!-- ================================================= -->
+            <!-- PROJECT -->
+            <!-- ================================================= -->
 
             <button
                 onclick="askSuggestedQuestion(
                     'What is this project?'
                 )"
             >
-
                 Project
-
             </button>
 
 
-
-            <!-- ML -->
+            <!-- ================================================= -->
+            <!-- OBJECTIVE -->
+            <!-- ================================================= -->
 
             <button
                 onclick="askSuggestedQuestion(
-                    'What ML algorithm does this project use?'
+                    'What is the objective of this project?'
                 )"
             >
-
-                ML Algorithm
-
+                Objective
             </button>
 
 
-
-            <!-- Dataset -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'What are the dataset columns?'
-                )"
-            >
-
-                Dataset
-
-            </button>
-
-
-
-            <!-- Architecture -->
-
-            <button
-                onclick="askSuggestedQuestion(
-                    'Explain the architecture'
-                )"
-            >
-
-                Architecture
-
-            </button>
-
-
-
-            <!-- Folder -->
+            <!-- ================================================= -->
+            <!-- FOLDER STRUCTURE -->
+            <!-- ================================================= -->
 
             <button
                 onclick="askSuggestedQuestion(
                     'Explain the folder structure'
                 )"
             >
-
                 Folder Structure
-
             </button>
 
 
-
-            <!-- Modules -->
+            <!-- ================================================= -->
+            <!-- ALL MODULES -->
+            <!-- ================================================= -->
 
             <button
                 onclick="askSuggestedQuestion(
                     'Explain every module in the project'
                 )"
             >
-
                 All Modules
-
             </button>
 
 
+            <!-- ================================================= -->
+            <!-- CODE MODULES -->
+            <!-- ================================================= -->
 
-            <!-- Viva -->
+            <button
+                onclick="askSuggestedQuestion(
+                    'Explain code of every module'
+                )"
+            >
+                Code Modules
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- ML ALGORITHM -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What ML algorithm does this project use?'
+                )"
+            >
+                ML Algorithm
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- RANDOM FOREST -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'Explain Random Forest'
+                )"
+            >
+                Random Forest
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- WHY RANDOM FOREST -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'Why did you choose Random Forest?'
+                )"
+            >
+                Why Random Forest
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- INPUT FEATURES -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What are the input features?'
+                )"
+            >
+                Input Features
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- TARGET VARIABLE -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What is the target variable?'
+                )"
+            >
+                Target Variable
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- PREDICTION LOGIC -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What logic is performed to predict waiting time?'
+                )"
+            >
+                Prediction Logic
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- DATASET -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What are the dataset columns?'
+                )"
+            >
+                Dataset
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- DATASET PREPARATION -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'How is the dataset prepared?'
+                )"
+            >
+                Dataset Preparation
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- MODEL TRAINING -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'How is the model trained?'
+                )"
+            >
+                Model Training
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- MAE -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What is MAE?'
+                )"
+            >
+                MAE
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- R2 SCORE -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What is R2 Score?'
+                )"
+            >
+                R² Score
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- ARCHITECTURE -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'Explain the architecture'
+                )"
+            >
+                Architecture
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- WORKFLOW -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'Explain the workflow'
+                )"
+            >
+                Workflow
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- FLASK -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What is Flask?'
+                )"
+            >
+                Flask
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- DATABASE -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What database is used?'
+                )"
+            >
+                Database
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- DATABASE TABLES -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What are the database tables?'
+                )"
+            >
+                Database Tables
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- API -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What is an API?'
+                )"
+            >
+                API
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- TOKEN -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'How is a token generated?'
+                )"
+            >
+                Token Generation
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- TECHNOLOGIES -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What technologies are used?'
+                )"
+            >
+                Technologies
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- ADVANTAGES -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What are the advantages of the project?'
+                )"
+            >
+                Advantages
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- LIMITATIONS -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What are the limitations of the project?'
+                )"
+            >
+                Limitations
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- FUTURE SCOPE -->
+            <!-- ================================================= -->
+
+            <button
+                onclick="askSuggestedQuestion(
+                    'What is the future scope?'
+                )"
+            >
+                Future Scope
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- VIVA -->
+            <!-- ================================================= -->
 
             <button
                 onclick="askSuggestedQuestion(
                     'Give me viva questions'
                 )"
             >
-
-                Viva
-
+                Viva Questions
             </button>
 
 
@@ -379,12 +636,14 @@
 
 
 
-        <!-- =================================================
-             CHATBOT INPUT
-             ================================================= -->
+        <!-- ================================================= -->
+        <!-- CHATBOT INPUT AREA -->
+        <!-- ================================================= -->
 
         <div class="chatbot-input-area">
 
+
+            <!-- Question Input -->
 
             <input
                 id="chatbotInput"
@@ -394,6 +653,8 @@
                 onkeydown="handleChatbotKey(event)"
             >
 
+
+            <!-- Send Button -->
 
             <button
                 class="chatbot-send"
@@ -413,19 +674,18 @@
 
 
 
-    <!-- =====================================================
-         DASHBOARD JAVASCRIPT
-         ===================================================== -->
+    <!-- ===================================================== -->
+    <!-- JAVASCRIPT FILES -->
+    <!-- ===================================================== -->
+
+    <!-- User Dashboard JavaScript -->
 
     <script
         src="js/dashboard.js"
     ></script>
 
 
-
-    <!-- =====================================================
-         CHATBOT JAVASCRIPT
-         ===================================================== -->
+    <!-- Chatbot JavaScript -->
 
     <script
         src="js/chatbot.js"

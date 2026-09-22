@@ -1,0 +1,30 @@
+/* =========================================================
+   SMART QUEUE PREDICTOR LOGO
+   ========================================================= */
+
+.project-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.project-logo-image {
+    width: 230px;
+    height: 230px;
+
+    object-fit: contain;
+
+    display: block;
+
+    filter: drop-shadow(
+        0 10px 20px rgba(37, 99, 235, 0.18)
+    );
+
+    transition: transform 0.3s ease;
+}
+
+.project-logo-image:hover {
+    transform: scale(1.04);
+}
