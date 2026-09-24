@@ -1,12 +1,4 @@
-// ============================================================
-// SMART QUEUE USER DASHBOARD
-// ============================================================
-
-const API = "http://127.0.0.1:5000";
-
-// ============================================================
-// GET LOGGED-IN USER
-// ============================================================
+const API = "[http://127.0.0.1:5000](http://127.0.0.1:5000)";
 
 function getLoggedInUser() {
     try {
@@ -24,22 +16,16 @@ function getLoggedInUser() {
     }
 }
 
-
-// ============================================================
-// PAGE LOAD
-// ============================================================
-
 document.addEventListener("DOMContentLoaded", function () {
 
     const user = getLoggedInUser();
 
     if (!user) {
         alert("Please login first.");
-        window.location.href = "login.html";
+        window\.location.href = "login.html";
         return;
     }
 
-    // Display welcome message
     const welcome = document.getElementById("welcome");
 
     if (welcome) {
@@ -47,15 +33,9 @@ document.addEventListener("DOMContentLoaded", function () {
             "Welcome, " + (user.name || "User") + "!";
     }
 
-    // Load user's queue information
     loadUserQueue();
 
 });
-
-
-// ============================================================
-// JOIN QUEUE
-// ============================================================
 
 async function joinQueue() {
 
@@ -69,7 +49,7 @@ async function joinQueue() {
 
     if (!user) {
         alert("Please login first.");
-        window.location.href = "login.html";
+        window\.location.href = "login.html";
         return;
     }
 
@@ -124,13 +104,11 @@ async function joinQueue() {
                     "Successfully joined the queue!";
             }
 
-            // Save queue ID
             localStorage.setItem(
                 "queue_id",
                 queueId
             );
 
-            // Save basic queue information
             localStorage.setItem(
                 "userQueue",
                 JSON.stringify({
@@ -140,7 +118,6 @@ async function joinQueue() {
                 })
             );
 
-            // Display token
             const token =
                 document.getElementById("token");
 
@@ -149,7 +126,6 @@ async function joinQueue() {
                     data.token_number;
             }
 
-            // Load complete queue information
             await loadUserQueue();
 
         } else {
@@ -175,11 +151,6 @@ async function joinQueue() {
     }
 }
 
-
-// ============================================================
-// LOAD USER QUEUE
-// ============================================================
-
 async function loadUserQueue() {
 
     const user =
@@ -191,11 +162,9 @@ async function loadUserQueue() {
 
     try {
 
-        // Get saved queue ID
         let queueId =
             localStorage.getItem("queue_id");
 
-        // If no queue ID, try userQueue
         if (!queueId) {
 
             const savedQueue =
@@ -231,7 +200,6 @@ async function loadUserQueue() {
             return;
         }
 
-        // Get queue status for this queue
         const response =
             await fetch(
                 API +
@@ -269,7 +237,6 @@ async function loadUserQueue() {
 
         updateQueueDisplay(queue);
 
-        // Automatically calculate prediction
         await predictUserWaitingTime(queue);
 
     } catch (error) {
@@ -281,16 +248,7 @@ async function loadUserQueue() {
     }
 }
 
-
-// ============================================================
-// UPDATE QUEUE INFORMATION ON SCREEN
-// ============================================================
-
 function updateQueueDisplay(queue) {
-
-    // ----------------------------
-    // TOKEN
-    // ----------------------------
 
     if (
         queue.token_number !== undefined
@@ -304,11 +262,6 @@ function updateQueueDisplay(queue) {
                 queue.token_number;
         }
     }
-
-
-    // ----------------------------
-    // QUEUE NAME
-    // ----------------------------
 
     if (
         queue.queue_name !== undefined
@@ -325,11 +278,6 @@ function updateQueueDisplay(queue) {
         }
     }
 
-
-    // ----------------------------
-    // SERVICE TYPE
-    // ----------------------------
-
     if (
         queue.service_type !== undefined
     ) {
@@ -344,11 +292,6 @@ function updateQueueDisplay(queue) {
                 queue.service_type;
         }
     }
-
-
-    // ----------------------------
-    // PEOPLE WAITING
-    // ----------------------------
 
     if (
         queue.people_waiting !== undefined
@@ -365,11 +308,6 @@ function updateQueueDisplay(queue) {
         }
     }
 
-
-    // ----------------------------
-    // PEOPLE AHEAD
-    // ----------------------------
-
     if (
         queue.people_ahead !== undefined
     ) {
@@ -384,11 +322,6 @@ function updateQueueDisplay(queue) {
                 queue.people_ahead;
         }
     }
-
-
-    // ----------------------------
-    // QUEUE POSITION
-    // ----------------------------
 
     if (
         queue.position !== undefined
@@ -405,11 +338,6 @@ function updateQueueDisplay(queue) {
         }
     }
 
-
-    // ----------------------------
-    // QUEUE STATUS
-    // ----------------------------
-
     if (
         queue.status !== undefined
     ) {
@@ -425,11 +353,6 @@ function updateQueueDisplay(queue) {
         }
     }
 
-
-    // ----------------------------
-    // ACTIVE COUNTERS
-    // ----------------------------
-
     if (
         queue.active_counters !== undefined
     ) {
@@ -444,11 +367,6 @@ function updateQueueDisplay(queue) {
                 queue.active_counters;
         }
     }
-
-
-    // ----------------------------
-    // AVERAGE SERVICE TIME
-    // ----------------------------
 
     if (
         queue.average_service_time !==
@@ -470,11 +388,6 @@ function updateQueueDisplay(queue) {
         }
     }
 
-
-    // ========================================================
-    // FILL PREDICTION INPUTS AUTOMATICALLY
-    // ========================================================
-
     if (
         queue.people_waiting !== undefined
     ) {
@@ -490,7 +403,6 @@ function updateQueueDisplay(queue) {
         }
     }
 
-
     if (
         queue.active_counters !== undefined
     ) {
@@ -505,7 +417,6 @@ function updateQueueDisplay(queue) {
                 queue.active_counters;
         }
     }
-
 
     if (
         queue.average_service_time !==
@@ -524,11 +435,6 @@ function updateQueueDisplay(queue) {
         }
     }
 }
-
-
-// ============================================================
-// PREDICT USER WAITING TIME
-// ============================================================
 
 async function predictUserWaitingTime(queue) {
 
@@ -569,7 +475,6 @@ async function predictUserWaitingTime(queue) {
             queue.average_service_time || 5
         );
 
-    // Default arrival rate
     const arrivalRateInput =
         document.getElementById(
             "arrivalRate"
@@ -655,7 +560,6 @@ async function predictUserWaitingTime(queue) {
                     ).toFixed(2);
             }
 
-            // Save prediction
             localStorage.setItem(
                 "predicted_waiting_time",
                 data.predicted_waiting_time
@@ -671,11 +575,6 @@ async function predictUserWaitingTime(queue) {
     }
 }
 
-
-// ============================================================
-// MANUAL PREDICTION BUTTON
-// ============================================================
-
 async function predictTime() {
 
     const user =
@@ -690,7 +589,6 @@ async function predictTime() {
         return;
     }
 
-
     const queueId =
         localStorage.getItem(
             "queue_id"
@@ -704,7 +602,6 @@ async function predictTime() {
 
         return;
     }
-
 
     const queueLength =
         Number(
@@ -734,7 +631,6 @@ async function predictTime() {
             ).value
         );
 
-
     if (
         queueLength < 0 ||
         counters <= 0 ||
@@ -748,7 +644,6 @@ async function predictTime() {
 
         return;
     }
-
 
     try {
 
@@ -784,7 +679,6 @@ async function predictTime() {
                 }
             );
 
-
         const data =
             await response.json();
 
@@ -792,7 +686,6 @@ async function predictTime() {
             "Manual prediction:",
             data
         );
-
 
         if (data.success) {
 
@@ -830,11 +723,6 @@ async function predictTime() {
     }
 }
 
-
-// ============================================================
-// LOGOUT
-// ============================================================
-
 function logout() {
 
     localStorage.removeItem("user");
@@ -844,15 +732,9 @@ function logout() {
         "predicted_waiting_time"
     );
 
-    window.location.href =
+    window\.location.href =
         "login.html";
 }
-
-
-// ============================================================
-// AUTO REFRESH QUEUE
-// Every 30 seconds
-// ============================================================
 
 setInterval(
     function () {

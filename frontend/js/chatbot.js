@@ -1,23 +1,8 @@
-// ============================================================
-// SMART QUEUE USER CHATBOT
-// Helps the logged-in user with:
-// - Token number
-// - People waiting
-// - Estimated waiting time
-// - Queue name
-// - Service type
-// - Queue status
-// - Active counters
-// - Average service time
-// ============================================================
 
 const CHATBOT_API =
     "http://127.0.0.1:5000/api/chatbot/ask";
 
 
-// ============================================================
-// GET LOGGED-IN USER
-// ============================================================
 
 function getLoggedInUser() {
 
@@ -44,10 +29,6 @@ function getLoggedInUser() {
 }
 
 
-// ============================================================
-// GET CURRENT QUEUE ID
-// ============================================================
-
 function getCurrentQueueId() {
 
     // First check queueId input on dashboard
@@ -73,7 +54,7 @@ function getCurrentQueueId() {
     }
 
 
-    // Check saved queue object
+
     const savedQueue =
         localStorage.getItem("userQueue");
 
@@ -105,10 +86,6 @@ function getCurrentQueueId() {
     return null;
 }
 
-
-// ============================================================
-// OPEN CHATBOT
-// ============================================================
 
 function toggleChatbot() {
 
@@ -152,10 +129,6 @@ function toggleChatbot() {
 }
 
 
-// ============================================================
-// CLOSE CHATBOT
-// ============================================================
-
 function closeChatbot() {
 
     const windowBox =
@@ -170,9 +143,6 @@ function closeChatbot() {
 }
 
 
-// ============================================================
-// SEND MESSAGE
-// ============================================================
 
 async function sendChatMessage() {
 
@@ -207,9 +177,6 @@ async function sendChatMessage() {
     }
 
 
-    // --------------------------------------------------------
-    // Check logged-in user
-    // --------------------------------------------------------
 
     const user =
         getLoggedInUser();
@@ -226,17 +193,11 @@ async function sendChatMessage() {
     }
 
 
-    // --------------------------------------------------------
-    // Get queue
-    // --------------------------------------------------------
 
     const queueId =
         getCurrentQueueId();
 
 
-    // --------------------------------------------------------
-    // Display user message
-    // --------------------------------------------------------
 
     addUserMessage(
         question
@@ -246,9 +207,6 @@ async function sendChatMessage() {
     input.value = "";
 
 
-    // --------------------------------------------------------
-    // Show typing
-    // --------------------------------------------------------
 
     const typing =
         addBotMessage(
@@ -258,9 +216,6 @@ async function sendChatMessage() {
 
     try {
 
-        // ----------------------------------------------------
-        // Send information to Flask
-        // ----------------------------------------------------
 
         const response =
             await fetch(
@@ -289,10 +244,6 @@ async function sendChatMessage() {
             );
 
 
-        // ----------------------------------------------------
-        // HTTP error
-        // ----------------------------------------------------
-
         if (!response.ok) {
 
             throw new Error(
@@ -302,17 +253,9 @@ async function sendChatMessage() {
         }
 
 
-        // ----------------------------------------------------
-        // Convert response to JSON
-        // ----------------------------------------------------
-
         const data =
             await response.json();
 
-
-        // ----------------------------------------------------
-        // Remove typing
-        // ----------------------------------------------------
 
         if (typing) {
 
@@ -320,9 +263,6 @@ async function sendChatMessage() {
         }
 
 
-        // ----------------------------------------------------
-        // Display chatbot response
-        // ----------------------------------------------------
 
         if (data.success) {
 
@@ -365,10 +305,6 @@ async function sendChatMessage() {
 }
 
 
-// ============================================================
-// ADD USER MESSAGE
-// ============================================================
-
 function addUserMessage(message) {
 
     const messages =
@@ -405,10 +341,6 @@ function addUserMessage(message) {
     scrollChat();
 }
 
-
-// ============================================================
-// ADD BOT MESSAGE
-// ============================================================
 
 function addBotMessage(message) {
 
@@ -450,9 +382,6 @@ function addBotMessage(message) {
 }
 
 
-// ============================================================
-// SCROLL CHAT TO BOTTOM
-// ============================================================
 
 function scrollChat() {
 
@@ -470,10 +399,6 @@ function scrollChat() {
 }
 
 
-// ============================================================
-// ENTER KEY
-// ============================================================
-
 function handleChatbotKey(event) {
 
     if (
@@ -486,10 +411,6 @@ function handleChatbotKey(event) {
     }
 }
 
-
-// ============================================================
-// SUGGESTED QUESTION
-// ============================================================
 
 function askSuggestedQuestion(
     question
@@ -513,11 +434,6 @@ function askSuggestedQuestion(
 
     sendChatMessage();
 }
-
-
-// ============================================================
-// CLEAR CHAT
-// ============================================================
 
 function clearChat() {
 
@@ -564,9 +480,6 @@ function clearChat() {
 }
 
 
-// ============================================================
-// INITIAL CHATBOT MESSAGE
-// ============================================================
 
 function showWelcomeMessage() {
 
@@ -582,7 +495,6 @@ function showWelcomeMessage() {
     }
 
 
-    // Don't add duplicate welcome message
     if (
         messages.children.length > 0
     ) {
@@ -639,9 +551,6 @@ function showWelcomeMessage() {
 }
 
 
-// ============================================================
-// LOGOUT SUPPORT
-// ============================================================
 
 function chatbotLogout() {
 
@@ -662,9 +571,6 @@ function chatbotLogout() {
 }
 
 
-// ============================================================
-// PAGE LOAD
-// ============================================================
 
 document.addEventListener(
     "DOMContentLoaded",

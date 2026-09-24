@@ -1,14 +1,8 @@
-// ============================================================
-// SMART QUEUE ADMIN DASHBOARD
-// ============================================================
 
 const API =
     "http://127.0.0.1:5000";
 
 
-// ============================================================
-// LOAD DASHBOARD
-// ============================================================
 
 async function loadDashboard() {
 
@@ -198,10 +192,6 @@ async function loadQueues() {
 }
 
 
-// ============================================================
-// LOAD SELECTED QUEUE DETAILS
-// ============================================================
-
 async function loadQueueDetails() {
 
     const queueId =
@@ -251,11 +241,6 @@ async function loadQueueDetails() {
             const q =
                 data.queue;
 
-
-            // ------------------------------------------------
-            // FORM VALUES
-            // ------------------------------------------------
-
             document.getElementById(
                 "queueName"
             ).value =
@@ -279,19 +264,11 @@ async function loadQueueDetails() {
             ).value =
                 q.average_service_time;
 
-
-            // IMPORTANT:
-            // People Waiting is now editable
-
             document.getElementById(
                 "peopleWaiting"
             ).value =
                 q.people_waiting;
 
-
-            // ------------------------------------------------
-            // CURRENT DETAILS
-            // ------------------------------------------------
 
             document.getElementById(
                 "currentQueueName"
@@ -323,10 +300,6 @@ async function loadQueueDetails() {
                 q.people_waiting;
 
 
-            // ------------------------------------------------
-            // CALCULATE PREDICTION
-            // ------------------------------------------------
-
             await calculatePrediction(q);
 
         }
@@ -344,9 +317,6 @@ async function loadQueueDetails() {
 }
 
 
-// ============================================================
-// UPDATE QUEUE
-// ============================================================
 
 async function updateQueue() {
 
@@ -371,10 +341,6 @@ async function updateQueue() {
 
     }
 
-
-    // --------------------------------------------------------
-    // READ VALUES
-    // --------------------------------------------------------
 
     const queueName =
         document.getElementById(
@@ -406,9 +372,6 @@ async function updateQueue() {
         ).value;
 
 
-    // --------------------------------------------------------
-    // VALIDATION
-    // --------------------------------------------------------
 
     if (!queueName) {
 
@@ -474,9 +437,6 @@ async function updateQueue() {
     }
 
 
-    // --------------------------------------------------------
-    // SEND TO BACKEND
-    // --------------------------------------------------------
 
     try {
 
@@ -527,12 +487,6 @@ async function updateQueue() {
             await response.json();
 
 
-        console.log(
-            "Update response:",
-            data
-        );
-
-
         if (data.success) {
 
             document.getElementById(
@@ -540,13 +494,9 @@ async function updateQueue() {
             ).innerText =
                 "Queue updated successfully!";
 
-
-            // Reload details
-
             await loadQueueDetails();
 
 
-            // Reload dashboard
 
             await loadDashboard();
 
@@ -576,10 +526,6 @@ async function updateQueue() {
 
 }
 
-
-// ============================================================
-// CALCULATE WAITING TIME PREDICTION
-// ============================================================
 
 async function calculatePrediction(queue) {
 
@@ -632,10 +578,7 @@ async function calculatePrediction(queue) {
                         queue_id:
                             queue.id,
 
-                        // IMPORTANT:
-                        // Use manually entered
-                        // people waiting value
-
+                
                         queue_length:
                             Number(
                                 document.getElementById(
@@ -714,10 +657,6 @@ async function calculatePrediction(queue) {
 }
 
 
-// ============================================================
-// SERVE NEXT CUSTOMER
-// ============================================================
-
 async function serveNext() {
 
     const queueId =
@@ -794,10 +733,6 @@ async function serveNext() {
 }
 
 
-// ============================================================
-// ARRIVAL RATE CHANGE
-// ============================================================
-
 document.addEventListener(
     "DOMContentLoaded",
     function () {
@@ -830,15 +765,6 @@ document.addEventListener(
             );
 
         }
-
-
-        // ----------------------------------------------------
-        // PEOPLE WAITING CHANGE
-        // ----------------------------------------------------
-        //
-        // When the admin changes People Waiting,
-        // immediately calculate a new prediction.
-        //
 
         const peopleWaitingInput =
             document.getElementById(
@@ -891,16 +817,12 @@ document.addEventListener(
 
                     };
 
-
-                    // Update current display immediately
-
                     document.getElementById(
                         "currentPeopleWaiting"
                     ).innerText =
                         peopleWaitingInput.value || 0;
 
 
-                    // Calculate prediction
 
                     await calculatePrediction(
                         queue
@@ -914,10 +836,6 @@ document.addEventListener(
     }
 );
 
-
-// ============================================================
-// QUEUE SELECTION CHANGE
-// ============================================================
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -946,9 +864,6 @@ document.addEventListener(
 );
 
 
-// ============================================================
-// INITIAL LOAD
-// ============================================================
 
 document.addEventListener(
     "DOMContentLoaded",
