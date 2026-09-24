@@ -1,10 +1,3 @@
-/* =========================================================
-   SMART QUEUE MANAGEMENT SYSTEM
-   ADMIN DASHBOARD
-   ========================================================= */
-
-/* ---------- RESET ---------- */
-
 * {
     margin: 0;
     padding: 0;
@@ -27,10 +20,6 @@ body {
     min-height: 100vh;
 }
 
-/* =========================================================
-   MAIN CONTAINER
-   ========================================================= */
-
 .admin-container,
 .container {
     width: 92%;
@@ -42,9 +31,6 @@ body {
     box-shadow: 0 15px 45px rgba(35, 70, 120, 0.14);
 }
 
-/* =========================================================
-   HEADER
-   ========================================================= */
 
 .admin-header {
     text-align: center;
@@ -69,9 +55,6 @@ body {
     font-size: 16px;
 }
 
-/* =========================================================
-   STATISTICS
-   ========================================================= */
 
 .dashboard-stats,
 .stats-container,
@@ -84,7 +67,6 @@ body {
     margin: 30px 0 40px;
 }
 
-/* Individual cards */
 
 .stat-card,
 .stat-box,
@@ -134,9 +116,6 @@ body {
     color: #657d9e;
 }
 
-/* =========================================================
-   SECTION
-   ========================================================= */
 
 .admin-section {
     border-top: 1px solid #e1e8f3;
@@ -151,10 +130,6 @@ body {
     font-size: 27px;
     margin: 0 0 20px;
 }
-
-/* =========================================================
-   MANAGE QUEUE
-   ========================================================= */
 
 .queue-selector-card,
 .queue-select-container,
@@ -194,9 +169,6 @@ body {
     box-shadow: 0 0 0 3px rgba(53, 105, 232, 0.12);
 }
 
-/* =========================================================
-   QUEUE INFORMATION CARD
-   ========================================================= */
 
 .queue-form-card,
 .queue-info,
@@ -219,19 +191,12 @@ body {
     margin-bottom: 22px;
 }
 
-/* =========================================================
-   FORM GRID
-   ========================================================= */
-
 .queue-form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
 }
 
-/* =========================================================
-   FORM GROUPS
-   ========================================================= */
 
 .form-group {
     display: flex;
@@ -246,9 +211,6 @@ body {
     margin-bottom: 8px;
 }
 
-/* =========================================================
-   INPUTS
-   ========================================================= */
 
 .form-group input,
 .form-group select,
@@ -270,7 +232,6 @@ body {
     outline: none;
 }
 
-/* Focus */
 
 .form-group input:focus,
 .form-group select:focus,
@@ -286,15 +247,6 @@ body {
     box-shadow: 0 0 0 3px rgba(53, 105, 232, 0.12);
 }
 
-/* =========================================================
-   FIX INLINE INPUT PROBLEM
-   ========================================================= */
-
-/*
-   This specifically fixes the problem shown in
-   your screenshot where all fields appear on one line.
-*/
-
 #queueName,
 #serviceType,
 #activeCounters,
@@ -305,10 +257,6 @@ body {
     margin-top: 7px;
 }
 
-/* =========================================================
-   IF LABELS ARE DIRECTLY INSIDE A FORM
-   ========================================================= */
-
 form label {
     display: block;
     font-size: 14px;
@@ -317,10 +265,6 @@ form label {
     margin-top: 15px;
     margin-bottom: 7px;
 }
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
 
 button {
     border: none;
@@ -332,8 +276,6 @@ button {
     transition: 0.25s ease;
     margin-top: 10px;
 }
-
-/* Update button */
 
 button[onclick="updateQueue()"] {
     background: linear-gradient(
@@ -349,7 +291,6 @@ button[onclick="updateQueue()"]:hover {
     box-shadow: 0 7px 18px rgba(48, 83, 220, 0.3);
 }
 
-/* Serve button */
 
 button[onclick="serveNext()"] {
     background: #eef3fb;
@@ -361,8 +302,6 @@ button[onclick="serveNext()"]:hover {
     background: #e2eaf7;
 }
 
-/* All buttons inside form */
-
 form button {
     background: linear-gradient(
         135deg,
@@ -372,20 +311,12 @@ form button {
     color: white;
 }
 
-/* =========================================================
-   BUTTON ROW
-   ========================================================= */
-
 .button-row {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
     margin-top: 10px;
 }
-
-/* =========================================================
-   MESSAGE
-   ========================================================= */
 
 #message {
     margin-top: 15px;
@@ -397,10 +328,6 @@ form button {
     background: #edf9f1;
     border: 1px solid #ccebd6;
 }
-
-/* =========================================================
-   CURRENT QUEUE DETAILS
-   ========================================================= */
 
 .queue-details-card,
 .current-queue,
@@ -420,9 +347,6 @@ form button {
     margin-bottom: 20px;
 }
 
-/* =========================================================
-   DETAILS GRID
-   ========================================================= */
 
 .details-grid {
     display: grid;
@@ -449,10 +373,6 @@ form button {
     font-weight: bold;
     color: #244a82;
 }
-
-/* =========================================================
-   WAITING TIME PREDICTION
-   ========================================================= */
 
 .prediction-card,
 .prediction-container {
@@ -488,9 +408,6 @@ form button {
     font-size: 15px;
 }
 
-/* =========================================================
-   PEOPLE WAITING
-   ========================================================= */
 
 .manual-input-card {
     background: white;
@@ -511,9 +428,6 @@ form button {
     margin-bottom: 18px;
 }
 
-/* =========================================================
-   HORIZONTAL LINE
-   ========================================================= */
 
 hr {
     border: none;
@@ -522,9 +436,6 @@ hr {
     margin: 30px 0;
 }
 
-/* =========================================================
-   FOOTER
-   ========================================================= */
 
 .admin-footer {
     text-align: center;
@@ -534,10 +445,6 @@ hr {
     color: #7185a2;
     font-size: 14px;
 }
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
 
 @media (max-width: 1000px) {
 

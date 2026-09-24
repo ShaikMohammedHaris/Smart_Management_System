@@ -15,15 +15,11 @@
     </title>
 
 
-    <!-- Admin CSS -->
-
     <link
         rel="stylesheet"
         href="css/admin.css"
     >
 
-
-    <!-- Chatbot CSS -->
 
     <link
         rel="stylesheet"
@@ -34,19 +30,7 @@
 
 
 <body>
-
-
-    <!-- =====================================================
-         MAIN CONTAINER
-         ===================================================== -->
-
     <div class="container">
-
-
-        <!-- =================================================
-             HEADER
-             ================================================= -->
-
         <h1>
             Smart Queue Admin Dashboard
         </h1>
@@ -57,16 +41,7 @@
             predict waiting times.
         </p>
 
-
-
-        <!-- =================================================
-             STATISTICS
-             ================================================= -->
-
         <div class="stats">
-
-
-            <!-- Total Users -->
 
             <div class="stat-card">
 
@@ -81,8 +56,6 @@
             </div>
 
 
-            <!-- Active Queues -->
-
             <div class="stat-card">
 
                 <h3>
@@ -94,9 +67,6 @@
                 </p>
 
             </div>
-
-
-            <!-- People Waiting -->
 
             <div class="stat-card">
 
@@ -110,8 +80,6 @@
 
             </div>
 
-
-            <!-- Average Prediction -->
 
             <div class="stat-card">
 
@@ -140,16 +108,9 @@
 
 
 
-        <!-- =================================================
-             MANAGE QUEUE
-             ================================================= -->
-
         <h2>
             Manage Queue
         </h2>
-
-
-        <!-- Queue Selection -->
 
         <div class="queue-selection">
 
@@ -168,21 +129,12 @@
 
         </div>
 
-
-
-        <!-- =================================================
-             QUEUE INFORMATION
-             ================================================= -->
-
         <div class="queue-info">
 
 
             <h3>
                 Queue Information
             </h3>
-
-
-            <!-- Queue Name -->
 
             <label for="queueName">
                 Queue Name
@@ -195,8 +147,6 @@
             >
 
 
-            <!-- Service Type -->
-
             <label for="serviceType">
                 Service Type
             </label>
@@ -207,8 +157,6 @@
                 placeholder="Enter service type"
             >
 
-
-            <!-- Active Counters -->
 
             <label for="activeCounters">
                 Active Counters
@@ -222,8 +170,6 @@
             >
 
 
-            <!-- Average Service Time -->
-
             <label for="averageServiceTime">
                 Average Service Time
             </label>
@@ -235,11 +181,6 @@
                 step="0.1"
                 placeholder="Enter service time"
             >
-
-
-            <!-- =================================================
-                 PEOPLE WAITING - MANUAL INPUT
-                 ================================================= -->
 
             <label for="peopleWaiting">
                 People Waiting
@@ -255,8 +196,6 @@
             >
 
 
-            <!-- Arrival Rate -->
-
             <label for="arrivalRate">
                 Arrival Rate
             </label>
@@ -270,12 +209,6 @@
                 value="5"
                 placeholder="Customers arriving"
             >
-
-
-
-            <!-- =================================================
-                 BUTTONS
-                 ================================================= -->
 
             <div class="queue-buttons">
 
@@ -298,10 +231,6 @@
 
             </div>
 
-
-
-            <!-- Message -->
-
             <div id="message"></div>
 
 
@@ -310,12 +239,6 @@
 
 
         <hr>
-
-
-
-        <!-- =================================================
-             CURRENT QUEUE DETAILS
-             ================================================= -->
 
         <h2>
             Current Queue Details
@@ -394,12 +317,6 @@
 
         </div>
 
-
-
-        <!-- =================================================
-             WAITING TIME PREDICTION
-             ================================================= -->
-
         <div class="prediction-section">
 
 
@@ -432,12 +349,6 @@
 
         <hr>
 
-
-
-        <!-- =================================================
-             LOGOUT
-             ================================================= -->
-
         <div
             style="
                 text-align: center;
@@ -457,12 +368,6 @@
 
     </div>
 
-
-
-    <!-- =====================================================
-         CHATBOT BUTTON
-         ===================================================== -->
-
     <button
         class="chatbot-button"
         onclick="toggleChatbot()"
@@ -472,18 +377,11 @@
     </button>
 
 
-
-    <!-- =====================================================
-         CHATBOT WINDOW
-         ===================================================== -->
-
     <div
         id="chatbotWindow"
         class="chatbot-window"
     >
 
-
-        <!-- Chatbot Header -->
 
         <div class="chatbot-header">
 
@@ -533,9 +431,6 @@
         </div>
 
 
-
-        <!-- Chat Messages -->
-
         <div
             id="chatbotMessages"
             class="chatbot-messages"
@@ -566,10 +461,6 @@
             </div>
 
         </div>
-
-
-
-        <!-- Suggestions -->
 
         <div class="chatbot-suggestions">
 
@@ -642,8 +533,6 @@
 
 
 
-        <!-- Chat Input -->
-
         <div class="chatbot-input-area">
 
 
@@ -671,19 +560,9 @@
     </div>
 
 
-
-    <!-- =====================================================
-         JAVASCRIPT
-         ===================================================== -->
-
     <script src="js/admin.js"></script>
 
     <script src="js/chatbot.js"></script>
-
-
-    <!-- =====================================================
-         LOGOUT
-         ===================================================== -->
 
     <script>
 
