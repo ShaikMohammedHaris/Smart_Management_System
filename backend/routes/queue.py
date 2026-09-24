@@ -3,9 +3,6 @@ from flask import Blueprint, request, jsonify
 from backend.database import get_db_connection
 
 
-# ============================================================
-# BLUEPRINT
-# ============================================================
 
 queue = Blueprint(
     "queue",
@@ -13,9 +10,6 @@ queue = Blueprint(
 )
 
 
-# ============================================================
-# CREATE QUEUE
-# ============================================================
 
 @queue.route("/create", methods=["POST"])
 def create_queue():
@@ -146,10 +140,6 @@ def create_queue():
     })
 
 
-# ============================================================
-# LIST QUEUES
-# ============================================================
-
 @queue.route("/list", methods=["GET"])
 def list_queues():
 
@@ -209,10 +199,6 @@ def list_queues():
 
     })
 
-
-# ============================================================
-# GET QUEUE DETAILS
-# ============================================================
 
 @queue.route("/details/<int:queue_id>", methods=["GET"])
 def queue_details(queue_id):
@@ -276,9 +262,6 @@ def queue_details(queue_id):
     })
 
 
-# ============================================================
-# UPDATE QUEUE
-# ============================================================
 
 @queue.route("/update/<int:queue_id>", methods=["PUT"])
 def update_queue(queue_id):
@@ -305,11 +288,6 @@ def update_queue(queue_id):
     people_waiting = data.get(
         "people_waiting"
     )
-
-
-    # --------------------------------------------------------
-    # CHECK REQUIRED VALUES
-    # --------------------------------------------------------
 
     if not queue_name:
 
@@ -351,9 +329,6 @@ def update_queue(queue_id):
         }), 400
 
 
-    # --------------------------------------------------------
-    # CONVERT VALUES
-    # --------------------------------------------------------
 
     try:
 
@@ -378,9 +353,6 @@ def update_queue(queue_id):
         }), 400
 
 
-    # --------------------------------------------------------
-    # VALIDATE VALUES
-    # --------------------------------------------------------
 
     if active_counters < 1:
 
@@ -484,10 +456,6 @@ def update_queue(queue_id):
     })
 
 
-# ============================================================
-# JOIN QUEUE
-# ============================================================
-
 @queue.route("/join", methods=["POST"])
 def join_queue():
 
@@ -552,9 +520,6 @@ def join_queue():
         }), 404
 
 
-    # --------------------------------------------------------
-    # Generate next token
-    # --------------------------------------------------------
 
     last_token = connection.execute("""
         SELECT MAX(token_number) AS last_token
@@ -576,9 +541,6 @@ def join_queue():
         )
 
 
-    # --------------------------------------------------------
-    # Add customer
-    # --------------------------------------------------------
 
     connection.execute("""
         INSERT INTO queue_entries
@@ -596,12 +558,6 @@ def join_queue():
     ))
 
 
-    # --------------------------------------------------------
-    # Increase people waiting
-    #
-    # This keeps manual value and real joins synchronized.
-    # Admin can later change it manually.
-    # --------------------------------------------------------
 
     connection.execute("""
         UPDATE queues
@@ -631,9 +587,6 @@ def join_queue():
     })
 
 
-# ============================================================
-# QUEUE STATUS
-# ============================================================
 
 @queue.route("/status/<int:queue_id>", methods=["GET"])
 def queue_status(queue_id):
@@ -740,9 +693,6 @@ def queue_status(queue_id):
     })
 
 
-# ============================================================
-# SERVE NEXT CUSTOMER
-# ============================================================
 
 @queue.route("/next/<int:queue_id>", methods=["POST"])
 def serve_next(queue_id):
@@ -772,9 +722,6 @@ def serve_next(queue_id):
         }), 404
 
 
-    # --------------------------------------------------------
-    # Mark token as served
-    # --------------------------------------------------------
 
     connection.execute("""
         UPDATE queue_entries
@@ -785,9 +732,6 @@ def serve_next(queue_id):
     ))
 
 
-    # --------------------------------------------------------
-    # Decrease people waiting
-    # --------------------------------------------------------
 
     connection.execute("""
         UPDATE queues

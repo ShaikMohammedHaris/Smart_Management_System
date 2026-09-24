@@ -6,15 +6,10 @@ from backend.database import get_db_connection
 chatbot = Blueprint("chatbot", __name__)
 
 
-# ============================================================
-# GET THE CURRENT USER'S QUEUE INFORMATION
-# ============================================================
 
 def get_user_queue_info(user_id):
 
     connection = get_db_connection()
-
-    # Get the user's latest queue entry
     user_entry = connection.execute("""
         SELECT
             qe.id,
@@ -42,10 +37,6 @@ def get_user_queue_info(user_id):
     entry_id = user_entry["id"]
     token_number = user_entry["token_number"]
 
-    # --------------------------------------------------------
-    # Count all people currently waiting in this queue
-    # --------------------------------------------------------
-
     people_waiting = connection.execute("""
         SELECT COUNT(*) AS total
         FROM queue_entries
@@ -53,9 +44,6 @@ def get_user_queue_info(user_id):
         AND status = 'waiting'
     """, (queue_id,)).fetchone()
 
-    # --------------------------------------------------------
-    # Count people ahead of the current user
-    # --------------------------------------------------------
 
     people_ahead = connection.execute("""
         SELECT COUNT(*) AS total
@@ -68,9 +56,6 @@ def get_user_queue_info(user_id):
         token_number
     )).fetchone()
 
-    # --------------------------------------------------------
-    # Get latest prediction for this queue
-    # --------------------------------------------------------
 
     latest_prediction = connection.execute("""
         SELECT
@@ -82,9 +67,6 @@ def get_user_queue_info(user_id):
         LIMIT 1
     """, (queue_id,)).fetchone()
 
-    # --------------------------------------------------------
-    # Calculate queue position
-    # --------------------------------------------------------
 
     position = people_ahead["total"] + 1
 
@@ -112,11 +94,6 @@ def get_user_queue_info(user_id):
         "predicted_waiting_time": predicted_waiting_time
     }
 
-
-# ============================================================
-# CHATBOT API
-# ============================================================
-
 @chatbot.route("/ask", methods=["POST"])
 def ask():
 
@@ -128,9 +105,6 @@ def ask():
 
     user_id = data.get("user_id")
 
-    # --------------------------------------------------------
-    # Check question
-    # --------------------------------------------------------
 
     if not question:
 
@@ -139,9 +113,6 @@ def ask():
             "message": "Please enter a question."
         }), 400
 
-    # --------------------------------------------------------
-    # Check logged-in user
-    # --------------------------------------------------------
 
     if not user_id:
 
@@ -162,10 +133,6 @@ def ask():
             "message": "Invalid user information."
         }), 400
 
-    # --------------------------------------------------------
-    # Get actual queue information from SQLite
-    # --------------------------------------------------------
-
     try:
 
         queue_info = get_user_queue_info(user_id)
@@ -180,9 +147,6 @@ def ask():
                 "Unable to retrieve your queue information."
         }), 500
 
-    # ========================================================
-    # GREETING
-    # ========================================================
 
     if any(word in question for word in [
         "hello",
@@ -202,10 +166,6 @@ def ask():
                 "queue position, people waiting, "
                 "waiting time and queue status."
         })
-
-    # ========================================================
-    # HELP
-    # ========================================================
 
     if (
         "help" in question
@@ -232,10 +192,6 @@ def ask():
                 "🎟️ How do I join a queue?"
         })
 
-    # ========================================================
-    # NO QUEUE
-    # ========================================================
-
     if queue_info is None:
 
         if (
@@ -256,10 +212,6 @@ def ask():
                     "token and view your waiting information."
             })
 
-    # ========================================================
-    # TOKEN NUMBER
-    # ========================================================
-
     if (
         "what is my token" in question
         or "my token number" in question
@@ -275,9 +227,6 @@ def ask():
                 f"{queue_info['token_number']}."
         })
 
-    # ========================================================
-    # PEOPLE WAITING
-    # ========================================================
 
     if (
         "how many people are waiting" in question
@@ -295,11 +244,6 @@ def ask():
                 f"{queue_info['people_waiting']} "
                 f"people waiting in your queue."
         })
-
-    # ========================================================
-    # PEOPLE AHEAD
-    # ========================================================
-
     if (
         "people ahead" in question
         or "customers ahead" in question
@@ -318,10 +262,6 @@ def ask():
                 f"people ahead of you."
         })
 
-    # ========================================================
-    # POSITION
-    # ========================================================
-
     if (
         "what is my position" in question
         or "my position" in question
@@ -338,10 +278,6 @@ def ask():
                 f"{queue_info['position']} "
                 f"in the queue."
         })
-
-    # ========================================================
-    # WAITING TIME
-    # ========================================================
 
     if (
         "waiting time" in question
@@ -368,7 +304,7 @@ def ask():
                     f"{waiting_time:.2f} minutes."
             })
 
-        # Fallback calculation
+
         waiting_time = (
             queue_info["people_ahead"]
             * queue_info["average_service_time"]
@@ -385,10 +321,7 @@ def ask():
                 f"{waiting_time:.2f} minutes."
         })
 
-    # ========================================================
-    # QUEUE NAME
-    # ========================================================
-
+   
     if (
         "which queue" in question
         or "my queue" in question
@@ -404,9 +337,6 @@ def ask():
                 f"'{queue_info['queue_name']}'."
         })
 
-    # ========================================================
-    # SERVICE TYPE
-    # ========================================================
 
     if (
         "service type" in question
@@ -422,10 +352,7 @@ def ask():
                 f"'{queue_info['service_type']}'."
         })
 
-    # ========================================================
-    # ACTIVE COUNTERS
-    # ========================================================
-
+  
     if (
         "active counters" in question
         or "how many counters" in question
@@ -441,10 +368,7 @@ def ask():
                 f"active counters serving customers."
         })
 
-    # ========================================================
-    # AVERAGE SERVICE TIME
-    # ========================================================
-
+  
     if (
         "average service time" in question
         or "service time" in question
@@ -460,9 +384,6 @@ def ask():
                 f"minutes."
         })
 
-    # ========================================================
-    # QUEUE STATUS
-    # ========================================================
 
     if (
         "queue status" in question
@@ -495,10 +416,6 @@ def ask():
                 f"📋 Queue: "
                 f"{queue_info['queue_name']}"
         })
-
-    # ========================================================
-    # IS MY TURN NEAR?
-    # ========================================================
 
     if (
         "is my turn near" in question
@@ -536,10 +453,6 @@ def ask():
             "answer": message
         })
 
-    # ========================================================
-    # HOW TO JOIN
-    # ========================================================
-
     if (
         "how do i join" in question
         or "how to join" in question
@@ -560,9 +473,6 @@ def ask():
                 "position and waiting time."
         })
 
-    # ========================================================
-    # WHAT HAPPENS AFTER JOINING
-    # ========================================================
 
     if (
         "what happens after joining" in question
@@ -626,10 +536,6 @@ def ask():
                 f"{queue_info['status']}"
         })
 
-    # ========================================================
-    # THANK YOU
-    # ========================================================
-
     if any(word in question for word in [
         "thank you",
         "thanks",
@@ -643,10 +549,7 @@ def ask():
                 "I'm here to help you with your queue."
         })
 
-    # ========================================================
-    # DEFAULT
-    # ========================================================
-
+ 
     return jsonify({
         "success": True,
         "answer":

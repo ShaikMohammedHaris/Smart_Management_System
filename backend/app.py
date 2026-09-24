@@ -8,7 +8,6 @@ from backend.routes.queue import queue
 from backend.routes.prediction import prediction
 from backend.routes.admin import admin
 
-# CHATBOT
 from backend.chatbot import chatbot
 
 
@@ -17,13 +16,8 @@ app = Flask(__name__)
 CORS(app)
 
 
-# Initialize database
 initialize_database()
 
-
-# ============================================================
-# REGISTER ROUTES
-# ============================================================
 
 app.register_blueprint(
     auth,
@@ -52,10 +46,6 @@ app.register_blueprint(
 )
 
 
-# ============================================================
-# HOME
-# ============================================================
-
 @app.route("/")
 def home():
 
@@ -65,9 +55,6 @@ def home():
     })
 
 
-# ============================================================
-# HEALTH
-# ============================================================
 
 @app.route("/api/health")
 def health():
@@ -78,9 +65,6 @@ def health():
     })
 
 
-# ============================================================
-# RUN
-# ============================================================
 
 if __name__ == "__main__":
 

@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!user) {
         alert("Please login first.");
-        window\.location.href = "login.html";
+        window.location.href = "login.html";
         return;
     }
 
@@ -49,7 +49,7 @@ async function joinQueue() {
 
     if (!user) {
         alert("Please login first.");
-        window\.location.href = "login.html";
+        window.location.href = "login.html";
         return;
     }
 
@@ -732,7 +732,7 @@ function logout() {
         "predicted_waiting_time"
     );
 
-    window\.location.href =
+    window.location.href =
         "login.html";
 }
 

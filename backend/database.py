@@ -2,10 +2,6 @@ import sqlite3
 import os
 
 
-# ============================================================
-# DATABASE LOCATION
-# ============================================================
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATABASE = os.path.join(
@@ -14,10 +10,6 @@ DATABASE = os.path.join(
     "queue.db"
 )
 
-
-# ============================================================
-# DATABASE CONNECTION
-# ============================================================
 
 def get_db_connection():
 
@@ -33,10 +25,6 @@ def get_db_connection():
     return connection
 
 
-# ============================================================
-# INITIALIZE DATABASE
-# ============================================================
-
 def initialize_database():
 
     connection = get_db_connection()
@@ -44,9 +32,6 @@ def initialize_database():
     cursor = connection.cursor()
 
 
-    # ========================================================
-    # USERS TABLE
-    # ========================================================
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -64,10 +49,6 @@ def initialize_database():
         )
     """)
 
-
-    # ========================================================
-    # QUEUES TABLE
-    # ========================================================
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS queues (
@@ -90,12 +71,6 @@ def initialize_database():
     """)
 
 
-    # ========================================================
-    # ADD people_waiting TO OLD DATABASE
-    #
-    # This is important because your queue.db may already exist.
-    # ========================================================
-
     columns = cursor.execute(
         "PRAGMA table_info(queues)"
     ).fetchall()
@@ -113,9 +88,6 @@ def initialize_database():
         """)
 
 
-    # ========================================================
-    # QUEUE ENTRIES TABLE
-    # ========================================================
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS queue_entries (
@@ -136,9 +108,6 @@ def initialize_database():
     """)
 
 
-    # ========================================================
-    # PREDICTIONS TABLE
-    # ========================================================
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS predictions (
@@ -161,9 +130,6 @@ def initialize_database():
     """)
 
 
-    # ========================================================
-    # DEFAULT ADMIN
-    # ========================================================
 
     cursor.execute("""
         INSERT OR IGNORE INTO users
@@ -187,9 +153,6 @@ def initialize_database():
     connection.close()
 
 
-# ============================================================
-# RUN DATABASE INITIALIZATION DIRECTLY
-# ============================================================
 
 if __name__ == "__main__":
 
