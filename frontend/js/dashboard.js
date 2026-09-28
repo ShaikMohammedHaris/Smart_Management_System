@@ -1,16 +1,22 @@
-// ============================================================
-// SMART QUEUE USER DASHBOARD
-// ============================================================
+/* =========================================================
+   SMART QUEUE MANAGEMENT SYSTEM
+   CUSTOMER DASHBOARD JAVASCRIPT
+   ========================================================= */
+
 
 const API = "http://127.0.0.1:5000";
 
-// ============================================================
-// GET LOGGED-IN USER
-// ============================================================
+
+/* =========================================================
+   GET LOGGED-IN USER
+   ========================================================= */
 
 function getLoggedInUser() {
+
     try {
-        const userData = localStorage.getItem("user");
+
+        const userData =
+            localStorage.getItem("user");
 
         if (!userData) {
             return null;
@@ -19,147 +25,232 @@ function getLoggedInUser() {
         return JSON.parse(userData);
 
     } catch (error) {
-        console.error("Error reading user:", error);
+
+        console.error(
+            "User data error:",
+            error
+        );
+
         return null;
     }
 }
 
 
-// ============================================================
-// PAGE LOAD
-// ============================================================
+/* =========================================================
+   CHECK LOGIN
+   ========================================================= */
 
-document.addEventListener("DOMContentLoaded", function () {
+const currentUser =
+    getLoggedInUser();
 
-    const user = getLoggedInUser();
 
-    if (!user) {
-        alert("Please login first.");
-        window.location.href = "login.html";
-        return;
+if (!currentUser) {
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =========================================================
+   SHOW USER NAME
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const user =
+            getLoggedInUser();
+
+        if (!user) {
+            return;
+        }
+
+        const welcome =
+            document.getElementById(
+                "welcomeUser"
+            );
+
+        if (welcome && user.name) {
+
+            welcome.innerText =
+                "Welcome, " +
+                user.name +
+                " to Smart Queue Predictor";
+
+        }
+
     }
-
-    // Display welcome message
-    const welcome = document.getElementById("welcome");
-
-    if (welcome) {
-        welcome.innerText =
-            "Welcome, " + (user.name || "User") + "!";
-    }
-
-    // Load user's queue information
-    loadUserQueue();
-
-});
+);
 
 
-// ============================================================
-// JOIN QUEUE
-// ============================================================
+/* =========================================================
+   JOIN QUEUE
+   ========================================================= */
 
 async function joinQueue() {
 
-    const queueIdInput =
-        document.getElementById("queueId");
+    const queueInput =
+        document.getElementById(
+            "queueId"
+        );
 
     const message =
-        document.getElementById("joinMessage");
+        document.getElementById(
+            "joinMessage"
+        );
 
-    const user = getLoggedInUser();
+    const user =
+        getLoggedInUser();
+
 
     if (!user) {
-        alert("Please login first.");
-        window.location.href = "login.html";
+
+        window.location.href =
+            "login.html";
+
         return;
+
     }
 
-    if (!queueIdInput) {
-        return;
-    }
 
     const queueId =
-        Number(queueIdInput.value);
+        Number(queueInput.value);
 
-    if (!queueId || queueId <= 0) {
 
-        if (message) {
-            message.innerText =
-                "Please enter a valid Queue ID.";
-        }
+    if (!queueId || queueId < 1) {
+
+        message.innerText =
+            "Please enter a valid Queue ID.";
+
+        message.style.color =
+            "#dc2626";
 
         return;
+
     }
+
+
+    message.innerText =
+        "Joining queue...";
+
+    message.style.color =
+        "#1976d2";
+
 
     try {
 
-        const response = await fetch(
-            API + "/api/queue/join",
-            {
-                method: "POST",
+        const response =
+            await fetch(
+                API +
+                "/api/queue/join",
+                {
+                    method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                body: JSON.stringify({
-                    queue_id: queueId,
-                    user_id: user.id
-                })
-            }
-        );
+                    body: JSON.stringify({
+
+                        queue_id:
+                            queueId,
+
+                        user_id:
+                            user.id
+
+                    })
+                }
+            );
+
 
         const data =
             await response.json();
+
 
         console.log(
             "Join queue response:",
             data
         );
 
-        if (data.success) {
 
-            if (message) {
-                message.innerText =
-                    "Successfully joined the queue!";
-            }
+        if (!response.ok || !data.success) {
 
-            // Save queue ID
-            localStorage.setItem(
-                "queue_id",
-                queueId
-            );
+            message.innerText =
+                data.message ||
+                "Could not join queue.";
 
-            // Save basic queue information
+            message.style.color =
+                "#dc2626";
+
+            return;
+
+        }
+
+
+        /*
+         * Save the selected queue.
+         */
+
+        localStorage.setItem(
+            "queue_id",
+            String(queueId)
+        );
+
+
+        /*
+         * Save queue information
+         * if backend returns it.
+         */
+
+        if (data.queue) {
+
             localStorage.setItem(
                 "userQueue",
-                JSON.stringify({
-                    queue_id: queueId,
-                    token_number:
-                        data.token_number
-                })
+                JSON.stringify(data.queue)
             );
 
-            // Display token
-            const token =
-                document.getElementById("token");
-
-            if (token) {
-                token.innerText =
-                    data.token_number;
-            }
-
-            // Load complete queue information
-            await loadUserQueue();
-
-        } else {
-
-            if (message) {
-                message.innerText =
-                    data.message ||
-                    "Unable to join queue.";
-            }
         }
+
+
+        /*
+         * Show token.
+         */
+
+        if (
+            data.token_number !== undefined &&
+            data.token_number !== null
+        ) {
+
+            document.getElementById(
+                "tokenNumber"
+            ).innerText =
+                data.token_number;
+
+            document.getElementById(
+                "tokenMessage"
+            ).innerText =
+                "You have successfully joined the queue.";
+
+        }
+
+
+        message.innerText =
+            data.message ||
+            "Successfully joined the queue!";
+
+        message.style.color =
+            "#15803d";
+
+
+        /*
+         * Load latest queue information.
+         */
+
+        await loadUserQueue();
+
 
     } catch (error) {
 
@@ -168,17 +259,20 @@ async function joinQueue() {
             error
         );
 
-        if (message) {
-            message.innerText =
-                "Cannot connect to server. Make sure Flask is running.";
-        }
+        message.innerText =
+            "Cannot connect to the server. Make sure Flask is running.";
+
+        message.style.color =
+            "#dc2626";
+
     }
+
 }
 
 
-// ============================================================
-// LOAD USER QUEUE
-// ============================================================
+/* =========================================================
+   LOAD USER QUEUE
+   ========================================================= */
 
 async function loadUserQueue() {
 
@@ -189,49 +283,62 @@ async function loadUserQueue() {
         return;
     }
 
-    try {
 
-        // Get saved queue ID
-        let queueId =
-            localStorage.getItem("queue_id");
+    let queueId =
+        localStorage.getItem(
+            "queue_id"
+        );
 
-        // If no queue ID, try userQueue
-        if (!queueId) {
+
+    /*
+     * If queue_id isn't available,
+     * try the saved queue object.
+     */
+
+    if (!queueId) {
+
+        try {
 
             const savedQueue =
-                localStorage.getItem("userQueue");
+                localStorage.getItem(
+                    "userQueue"
+                );
 
             if (savedQueue) {
 
-                try {
+                const queue =
+                    JSON.parse(savedQueue);
 
-                    const queue =
-                        JSON.parse(savedQueue);
+                if (queue && queue.id) {
 
                     queueId =
-                        queue.queue_id ||
                         queue.id;
 
-                } catch (error) {
-
-                    console.error(
-                        "Saved queue error:",
-                        error
-                    );
                 }
+
             }
-        }
 
-        if (!queueId) {
+        } catch (error) {
 
-            console.log(
-                "User has not joined a queue yet."
+            console.error(
+                "Saved queue error:",
+                error
             );
 
-            return;
         }
 
-        // Get queue status for this queue
+    }
+
+
+    if (!queueId) {
+
+        return;
+
+    }
+
+
+    try {
+
         const response =
             await fetch(
                 API +
@@ -239,296 +346,294 @@ async function loadUserQueue() {
                 queueId
             );
 
+
         if (!response.ok) {
 
             throw new Error(
                 "Queue status request failed"
             );
+
         }
+
 
         const data =
             await response.json();
+
 
         console.log(
             "Queue status:",
             data
         );
 
-        if (!data.success) {
 
-            console.log(
-                data.message ||
-                "Queue information unavailable."
+        if (data.success) {
+
+            const queue =
+                data.queue;
+
+            updateQueueDisplay(
+                queue
             );
 
-            return;
+
+            /*
+             * Automatically predict
+             * waiting time.
+             */
+
+            await predictUserWaitingTime(
+                queue
+            );
+
         }
 
-        const queue =
-            data.queue || data;
-
-        updateQueueDisplay(queue);
-
-        // Automatically calculate prediction
-        await predictUserWaitingTime(queue);
 
     } catch (error) {
 
         console.error(
-            "Load user queue error:",
+            "Queue loading error:",
             error
         );
+
     }
+
 }
 
 
-// ============================================================
-// UPDATE QUEUE INFORMATION ON SCREEN
-// ============================================================
+/* =========================================================
+   UPDATE QUEUE DISPLAY
+   ========================================================= */
 
 function updateQueueDisplay(queue) {
 
-    // ----------------------------
-    // TOKEN
-    // ----------------------------
-
-    if (
-        queue.token_number !== undefined
-    ) {
-
-        const token =
-            document.getElementById("token");
-
-        if (token) {
-            token.innerText =
-                queue.token_number;
-        }
+    if (!queue) {
+        return;
     }
 
 
-    // ----------------------------
-    // QUEUE NAME
-    // ----------------------------
+    /*
+     * Queue name
+     */
 
-    if (
-        queue.queue_name !== undefined
-    ) {
+    const queueName =
+        document.getElementById(
+            "userQueueName"
+        );
 
-        const element =
-            document.getElementById(
-                "userQueueName"
-            );
+    if (queueName) {
 
-        if (element) {
-            element.innerText =
-                queue.queue_name;
-        }
+        queueName.innerText =
+            queue.name ||
+            queue.queue_name ||
+            "-";
+
     }
 
 
-    // ----------------------------
-    // SERVICE TYPE
-    // ----------------------------
+    /*
+     * Service type
+     */
 
-    if (
-        queue.service_type !== undefined
-    ) {
+    const serviceType =
+        document.getElementById(
+            "userServiceType"
+        );
 
-        const element =
-            document.getElementById(
-                "userServiceType"
-            );
+    if (serviceType) {
 
-        if (element) {
-            element.innerText =
-                queue.service_type;
-        }
+        serviceType.innerText =
+            queue.service_type ||
+            "-";
+
     }
 
 
-    // ----------------------------
-    // PEOPLE WAITING
-    // ----------------------------
+    /*
+     * People waiting
+     */
 
-    if (
-        queue.people_waiting !== undefined
-    ) {
+    const peopleWaiting =
+        Number(
+            queue.people_waiting ??
+            queue.queue_length ??
+            0
+        );
 
-        const element =
-            document.getElementById(
-                "userPeopleWaiting"
-            );
 
-        if (element) {
-            element.innerText =
-                queue.people_waiting;
+    document.getElementById(
+        "userPeopleWaiting"
+    ).innerText =
+        peopleWaiting;
+
+
+    /*
+     * People ahead
+     */
+
+    const peopleAhead =
+        Number(
+            queue.people_ahead ??
+            0
+        );
+
+
+    document.getElementById(
+        "userPeopleAhead"
+    ).innerText =
+        peopleAhead;
+
+
+    /*
+     * Queue position
+     */
+
+    const position =
+        Number(
+            queue.position ??
+            queue.queue_position ??
+            0
+        );
+
+
+    document.getElementById(
+        "userPosition"
+    ).innerText =
+        position;
+
+
+    /*
+     * Queue status
+     */
+
+    const status =
+        document.getElementById(
+            "userQueueStatus"
+        );
+
+
+    if (status) {
+
+        status.innerText =
+            queue.status ||
+            "Active";
+
+
+        if (
+            String(queue.status)
+                .toLowerCase()
+                === "active"
+        ) {
+
+            status.className =
+                "status-active";
+
+        } else {
+
+            status.className =
+                "";
+
         }
+
     }
 
 
-    // ----------------------------
-    // PEOPLE AHEAD
-    // ----------------------------
+    /*
+     * Active counters
+     */
 
-    if (
-        queue.people_ahead !== undefined
-    ) {
+    document.getElementById(
+        "userActiveCounters"
+    ).innerText =
+        queue.active_counters ??
+        "-";
 
-        const element =
-            document.getElementById(
-                "userPeopleAhead"
-            );
 
-        if (element) {
-            element.innerText =
-                queue.people_ahead;
-        }
+    /*
+     * Average service time
+     */
+
+    document.getElementById(
+        "userAverageServiceTime"
+    ).innerText =
+        queue.average_service_time !== undefined
+            ? queue.average_service_time + " min"
+            : "-";
+
+
+    /*
+     * Prediction form automatically
+     * receives current queue values.
+     */
+
+    const queueLengthInput =
+        document.getElementById(
+            "queueLength"
+        );
+
+    const countersInput =
+        document.getElementById(
+            "counters"
+        );
+
+    const serviceTimeInput =
+        document.getElementById(
+            "serviceTime"
+        );
+
+
+    if (queueLengthInput) {
+
+        queueLengthInput.value =
+            peopleWaiting;
+
     }
 
 
-    // ----------------------------
-    // QUEUE POSITION
-    // ----------------------------
+    if (countersInput) {
 
-    if (
-        queue.position !== undefined
-    ) {
+        countersInput.value =
+            queue.active_counters ??
+            1;
 
-        const element =
-            document.getElementById(
-                "userPosition"
-            );
-
-        if (element) {
-            element.innerText =
-                queue.position;
-        }
     }
 
 
-    // ----------------------------
-    // QUEUE STATUS
-    // ----------------------------
+    if (serviceTimeInput) {
 
-    if (
-        queue.status !== undefined
-    ) {
+        serviceTimeInput.value =
+            queue.average_service_time ??
+            1;
 
-        const element =
-            document.getElementById(
-                "userQueueStatus"
-            );
-
-        if (element) {
-            element.innerText =
-                queue.status;
-        }
     }
 
 
-    // ----------------------------
-    // ACTIVE COUNTERS
-    // ----------------------------
+    /*
+     * Display token if returned.
+     */
 
     if (
-        queue.active_counters !== undefined
+        queue.token_number !== undefined &&
+        queue.token_number !== null
     ) {
 
-        const element =
-            document.getElementById(
-                "userActiveCounters"
-            );
+        document.getElementById(
+            "tokenNumber"
+        ).innerText =
+            queue.token_number;
 
-        if (element) {
-            element.innerText =
-                queue.active_counters;
-        }
+        document.getElementById(
+            "tokenMessage"
+        ).innerText =
+            "Your token is active in this queue.";
+
     }
 
-
-    // ----------------------------
-    // AVERAGE SERVICE TIME
-    // ----------------------------
-
-    if (
-        queue.average_service_time !==
-        undefined
-    ) {
-
-        const element =
-            document.getElementById(
-                "userAverageServiceTime"
-            );
-
-        if (element) {
-
-            element.innerText =
-                Number(
-                    queue.average_service_time
-                ).toFixed(1) +
-                " minutes";
-        }
-    }
-
-
-    // ========================================================
-    // FILL PREDICTION INPUTS AUTOMATICALLY
-    // ========================================================
-
-    if (
-        queue.people_waiting !== undefined
-    ) {
-
-        const input =
-            document.getElementById(
-                "queueLength"
-            );
-
-        if (input) {
-            input.value =
-                queue.people_waiting;
-        }
-    }
-
-
-    if (
-        queue.active_counters !== undefined
-    ) {
-
-        const input =
-            document.getElementById(
-                "counters"
-            );
-
-        if (input) {
-            input.value =
-                queue.active_counters;
-        }
-    }
-
-
-    if (
-        queue.average_service_time !==
-        undefined
-    ) {
-
-        const input =
-            document.getElementById(
-                "serviceTime"
-            );
-
-        if (input) {
-
-            input.value =
-                queue.average_service_time;
-        }
-    }
 }
 
 
-// ============================================================
-// PREDICT USER WAITING TIME
-// ============================================================
+/* =========================================================
+   AUTOMATIC WAITING TIME PREDICTION
+   ========================================================= */
 
 async function predictUserWaitingTime(queue) {
 
@@ -536,61 +641,40 @@ async function predictUserWaitingTime(queue) {
         return;
     }
 
-    const user =
-        getLoggedInUser();
 
-    if (!user) {
-        return;
-    }
-
-    const queueId =
-        queue.queue_id ||
-        queue.id ||
-        localStorage.getItem(
-            "queue_id"
-        );
-
-    if (!queueId) {
-        return;
-    }
-
-    const queueLength =
-        Number(
-            queue.people_waiting || 0
-        );
-
-    const activeCounters =
-        Number(
-            queue.active_counters || 1
-        );
-
-    const serviceTime =
-        Number(
-            queue.average_service_time || 5
-        );
-
-    // Default arrival rate
-    const arrivalRateInput =
+    const arrivalInput =
         document.getElementById(
             "arrivalRate"
         );
 
-    let arrivalRate = 1;
 
-    if (
-        arrivalRateInput &&
-        arrivalRateInput.value
-    ) {
+    const arrivalRate =
+        Number(
+            arrivalInput?.value || 1
+        );
 
-        arrivalRate =
-            Number(
-                arrivalRateInput.value
-            );
-    }
 
-    if (!arrivalRate || arrivalRate <= 0) {
-        arrivalRate = 1;
-    }
+    const queueLength =
+        Number(
+            queue.people_waiting ??
+            queue.queue_length ??
+            0
+        );
+
+
+    const activeCounters =
+        Number(
+            queue.active_counters ||
+            1
+        );
+
+
+    const serviceTime =
+        Number(
+            queue.average_service_time ||
+            1
+        );
+
 
     try {
 
@@ -607,8 +691,9 @@ async function predictUserWaitingTime(queue) {
                     },
 
                     body: JSON.stringify({
+
                         queue_id:
-                            Number(queueId),
+                            queue.id,
 
                         queue_length:
                             queueLength,
@@ -621,90 +706,64 @@ async function predictUserWaitingTime(queue) {
 
                         arrival_rate:
                             arrivalRate
+
                     })
                 }
             );
+
 
         if (!response.ok) {
 
             throw new Error(
                 "Prediction request failed"
             );
+
         }
+
 
         const data =
             await response.json();
 
+
         console.log(
-            "Prediction response:",
+            "Automatic prediction:",
             data
         );
+
 
         if (data.success) {
 
             const prediction =
-                document.getElementById(
-                    "prediction"
+                Number(
+                    data.predicted_waiting_time
                 );
 
-            if (prediction) {
 
-                prediction.innerText =
-                    Number(
-                        data.predicted_waiting_time
-                    ).toFixed(2);
-            }
+            document.getElementById(
+                "prediction"
+            ).innerText =
+                prediction.toFixed(2);
 
-            // Save prediction
-            localStorage.setItem(
-                "predicted_waiting_time",
-                data.predicted_waiting_time
-            );
         }
+
 
     } catch (error) {
 
         console.error(
-            "Prediction error:",
+            "Automatic prediction error:",
             error
         );
+
     }
+
 }
 
 
-// ============================================================
-// MANUAL PREDICTION BUTTON
-// ============================================================
+/* =========================================================
+   MANUAL PREDICTION
+   ========================================================= */
 
 async function predictTime() {
-
-    const user =
-        getLoggedInUser();
-
-    if (!user) {
-
-        alert(
-            "Please login first."
-        );
-
-        return;
-    }
-
-
-    const queueId =
-        localStorage.getItem(
-            "queue_id"
-        );
-
-    if (!queueId) {
-
-        alert(
-            "Please join a queue first."
-        );
-
-        return;
-    }
-
 
     const queueLength =
         Number(
@@ -713,6 +772,7 @@ async function predictTime() {
             ).value
         );
 
+
     const counters =
         Number(
             document.getElementById(
@@ -720,12 +780,14 @@ async function predictTime() {
             ).value
         );
 
+
     const serviceTime =
         Number(
             document.getElementById(
                 "serviceTime"
             ).value
         );
+
 
     const arrivalRate =
         Number(
@@ -737,9 +799,8 @@ async function predictTime() {
 
     if (
         queueLength < 0 ||
-        counters <= 0 ||
-        serviceTime <= 0 ||
-        arrivalRate < 0
+        !counters ||
+        !serviceTime
     ) {
 
         alert(
@@ -747,10 +808,19 @@ async function predictTime() {
         );
 
         return;
+
     }
 
 
     try {
+
+        const queueId =
+            Number(
+                localStorage.getItem(
+                    "queue_id"
+                ) || 1
+            );
+
 
         const response =
             await fetch(
@@ -767,7 +837,7 @@ async function predictTime() {
                     body: JSON.stringify({
 
                         queue_id:
-                            Number(queueId),
+                            queueId,
 
                         queue_length:
                             queueLength,
@@ -780,6 +850,7 @@ async function predictTime() {
 
                         arrival_rate:
                             arrivalRate
+
                     })
                 }
             );
@@ -788,34 +859,36 @@ async function predictTime() {
         const data =
             await response.json();
 
+
         console.log(
             "Manual prediction:",
             data
         );
 
 
-        if (data.success) {
-
-            const prediction =
-                document.getElementById(
-                    "prediction"
-                );
-
-            if (prediction) {
-
-                prediction.innerText =
-                    Number(
-                        data.predicted_waiting_time
-                    ).toFixed(2);
-            }
-
-        } else {
+        if (!data.success) {
 
             alert(
                 data.message ||
                 "Prediction failed."
             );
+
+            return;
+
         }
+
+
+        const prediction =
+            Number(
+                data.predicted_waiting_time
+            );
+
+
+        document.getElementById(
+            "prediction"
+        ).innerText =
+            prediction.toFixed(2);
+
 
     } catch (error) {
 
@@ -825,45 +898,84 @@ async function predictTime() {
         );
 
         alert(
-            "Cannot connect to Flask server."
+            "Cannot connect to prediction server."
         );
+
     }
+
 }
 
 
-// ============================================================
-// LOGOUT
-// ============================================================
+/* =========================================================
+   LOGOUT
+   ========================================================= */
 
 function logout() {
 
-    localStorage.removeItem("user");
-    localStorage.removeItem("queue_id");
-    localStorage.removeItem("userQueue");
     localStorage.removeItem(
-        "predicted_waiting_time"
+        "user"
     );
+
+    localStorage.removeItem(
+        "queue_id"
+    );
+
+    localStorage.removeItem(
+        "userQueue"
+    );
+
 
     window.location.href =
         "login.html";
+
 }
 
 
-// ============================================================
-// AUTO REFRESH QUEUE
-// Every 30 seconds
-// ============================================================
+/* =========================================================
+   AUTO REFRESH
+   ========================================================= */
 
-setInterval(
+document.addEventListener(
+    "DOMContentLoaded",
     function () {
 
-        const user =
-            getLoggedInUser();
+        loadUserQueue();
 
-        if (user) {
-            loadUserQueue();
+
+        /*
+         * Refresh queue information
+         * every 30 seconds.
+         */
+
+        setInterval(
+            loadUserQueue,
+            30000
+        );
+
+
+        /*
+         * Recalculate prediction when
+         * arrival rate changes.
+         */
+
+        const arrivalInput =
+            document.getElementById(
+                "arrivalRate"
+            );
+
+
+        if (arrivalInput) {
+
+            arrivalInput.addEventListener(
+                "change",
+                function () {
+
+                    loadUserQueue();
+
+                }
+            );
+
         }
 
-    },
-    30000
+    }
 );

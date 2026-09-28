@@ -1,199 +1,144 @@
-// ============================================================
-// SMART QUEUE USER CHATBOT
-// Helps the logged-in user with:
-// - Token number
-// - People waiting
-// - Estimated waiting time
-// - Queue name
-// - Service type
-// - Queue status
-// - Active counters
-// - Average service time
-// ============================================================
+// =====================================================
+// SMART QUEUE CUSTOMER CHATBOT
+// =====================================================
 
 const CHATBOT_API =
     "http://127.0.0.1:5000/api/chatbot/ask";
 
 
-// ============================================================
+// =====================================================
 // GET LOGGED-IN USER
-// ============================================================
+// =====================================================
 
 function getLoggedInUser() {
 
     try {
 
-        const userData =
-            localStorage.getItem("user");
+        const user =
+            JSON.parse(
+                localStorage.getItem("user")
+            );
 
-        if (!userData) {
-            return null;
-        }
+        return user;
 
-        return JSON.parse(userData);
-
-    } catch (error) {
+    }
+    catch (error) {
 
         console.error(
-            "Error reading logged-in user:",
+            "User data error:",
             error
         );
 
         return null;
+
     }
+
 }
 
 
-// ============================================================
-// GET CURRENT QUEUE ID
-// ============================================================
+// =====================================================
+// GET QUEUE ID
+// =====================================================
 
-function getCurrentQueueId() {
+function getQueueId() {
 
-    // First check queueId input on dashboard
-    const queueInput =
-        document.getElementById("queueId");
+    return localStorage.getItem(
+        "queue_id"
+    );
 
-    if (
-        queueInput &&
-        queueInput.value
-    ) {
-
-        return Number(queueInput.value);
-    }
-
-
-    // Check localStorage
-    const savedQueueId =
-        localStorage.getItem("queue_id");
-
-    if (savedQueueId) {
-
-        return Number(savedQueueId);
-    }
-
-
-    // Check saved queue object
-    const savedQueue =
-        localStorage.getItem("userQueue");
-
-    if (savedQueue) {
-
-        try {
-
-            const queue =
-                JSON.parse(savedQueue);
-
-            if (queue.queue_id) {
-                return Number(queue.queue_id);
-            }
-
-            if (queue.id) {
-                return Number(queue.id);
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Queue data error:",
-                error
-            );
-        }
-    }
-
-
-    return null;
 }
 
 
-// ============================================================
-// OPEN CHATBOT
-// ============================================================
+// =====================================================
+// ADD MESSAGE TO CHAT
+// =====================================================
 
-function toggleChatbot() {
+function addChatMessage(
+    message,
+    type
+) {
 
-    const windowBox =
+    const chatMessages =
         document.getElementById(
-            "chatbotWindow"
+            "chatMessages"
         );
 
-    if (!windowBox) {
+
+    if (!chatMessages) {
 
         console.error(
-            "chatbotWindow not found"
+            "chatMessages element not found."
         );
 
         return;
+
     }
 
 
-    if (
-        windowBox.style.display === "none" ||
-        windowBox.style.display === ""
-    ) {
-
-        windowBox.style.display = "flex";
-
-
-        const input =
-            document.getElementById(
-                "chatbotInput"
-            );
-
-        if (input) {
-
-            input.focus();
-        }
-
-    } else {
-
-        windowBox.style.display = "none";
-    }
-}
-
-
-// ============================================================
-// CLOSE CHATBOT
-// ============================================================
-
-function closeChatbot() {
-
-    const windowBox =
-        document.getElementById(
-            "chatbotWindow"
+    const messageDiv =
+        document.createElement(
+            "div"
         );
 
-    if (windowBox) {
 
-        windowBox.style.display = "none";
+    messageDiv.classList.add(
+        "chat-message"
+    );
+
+
+    if (type === "user") {
+
+        messageDiv.classList.add(
+            "user-message"
+        );
+
     }
+    else {
+
+        messageDiv.classList.add(
+            "bot-message"
+        );
+
+    }
+
+
+    messageDiv.innerText =
+        message;
+
+
+    chatMessages.appendChild(
+        messageDiv
+    );
+
+
+    // Automatically scroll down
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
 }
 
 
-// ============================================================
+// =====================================================
 // SEND MESSAGE
-// ============================================================
+// =====================================================
 
-async function sendChatMessage() {
+async function sendMessage() {
 
     const input =
         document.getElementById(
-            "chatbotInput"
-        );
-
-    const messages =
-        document.getElementById(
-            "chatbotMessages"
+            "chatInput"
         );
 
 
-    if (!input || !messages) {
+    if (!input) {
 
         console.error(
-            "Chatbot elements not found"
+            "chatInput element not found."
         );
 
         return;
+
     }
 
 
@@ -201,15 +146,14 @@ async function sendChatMessage() {
         input.value.trim();
 
 
+    // Don't send empty message
+
     if (!question) {
 
         return;
+
     }
 
-
-    // --------------------------------------------------------
-    // Check logged-in user
-    // --------------------------------------------------------
 
     const user =
         getLoggedInUser();
@@ -217,50 +161,90 @@ async function sendChatMessage() {
 
     if (!user) {
 
-        addBotMessage(
-            "⚠️ You are not logged in.\n\n" +
-            "Please login first to use the Smart Queue Assistant."
+        addChatMessage(
+            "Please login first to use the customer support chatbot.",
+            "bot"
         );
 
         return;
+
     }
 
 
-    // --------------------------------------------------------
-    // Get queue
-    // --------------------------------------------------------
-
     const queueId =
-        getCurrentQueueId();
+        getQueueId();
 
 
-    // --------------------------------------------------------
-    // Display user message
-    // --------------------------------------------------------
+    // Display customer's message
 
-    addUserMessage(
-        question
+    addChatMessage(
+        question,
+        "user"
     );
 
+
+    // Clear input
 
     input.value = "";
 
 
-    // --------------------------------------------------------
-    // Show typing
-    // --------------------------------------------------------
+    // Show temporary message
 
-    const typing =
-        addBotMessage(
-            "Typing..."
+    const loadingMessage =
+        document.createElement(
+            "div"
         );
+
+
+    loadingMessage.classList.add(
+        "chat-message",
+        "bot-message"
+    );
+
+
+    loadingMessage.innerText =
+        "Checking your queue information...";
+
+
+    const chatMessages =
+        document.getElementById(
+            "chatMessages"
+        );
+
+
+    chatMessages.appendChild(
+        loadingMessage
+    );
+
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
 
 
     try {
 
-        // ----------------------------------------------------
-        // Send information to Flask
-        // ----------------------------------------------------
+        console.log(
+            "Sending chatbot request..."
+        );
+
+
+        console.log(
+            "User ID:",
+            user.id
+        );
+
+
+        console.log(
+            "Queue ID:",
+            queueId
+        );
+
+
+        console.log(
+            "Question:",
+            question
+        );
+
 
         const response =
             await fetch(
@@ -279,217 +263,182 @@ async function sendChatMessage() {
                             question,
 
                         user_id:
-                            user.id,
+                            Number(user.id),
 
                         queue_id:
                             queueId
+                                ? Number(queueId)
+                                : null
 
                     })
+
                 }
             );
 
 
-        // ----------------------------------------------------
-        // HTTP error
-        // ----------------------------------------------------
+        console.log(
+            "Chatbot HTTP status:",
+            response.status
+        );
 
-        if (!response.ok) {
-
-            throw new Error(
-                "HTTP Error: " +
-                response.status
-            );
-        }
-
-
-        // ----------------------------------------------------
-        // Convert response to JSON
-        // ----------------------------------------------------
 
         const data =
             await response.json();
 
 
-        // ----------------------------------------------------
-        // Remove typing
-        // ----------------------------------------------------
-
-        if (typing) {
-
-            typing.remove();
-        }
+        console.log(
+            "Chatbot response:",
+            data
+        );
 
 
-        // ----------------------------------------------------
-        // Display chatbot response
-        // ----------------------------------------------------
+        // Remove loading message
 
-        if (data.success) {
+        loadingMessage.remove();
 
-            addBotMessage(
-                data.answer
+
+        if (response.ok && data.success) {
+
+            let answer =
+                data.answer ||
+                data.message ||
+                data.response;
+
+
+            if (!answer) {
+
+                answer =
+                    "I received your request, but no answer was returned.";
+
+            }
+
+
+            addChatMessage(
+                answer,
+                "bot"
             );
 
-        } else {
+        }
 
-            addBotMessage(
+        else {
+
+            addChatMessage(
 
                 data.message ||
-                "Sorry, I could not find the requested information."
+                "Sorry, I could not get your queue information.",
+
+                "bot"
 
             );
+
         }
 
-
-    } catch (error) {
+    }
+    catch (error) {
 
         console.error(
-            "Chatbot error:",
+            "CHATBOT ERROR:",
             error
         );
 
 
-        if (typing) {
-
-            typing.remove();
-        }
+        loadingMessage.remove();
 
 
-        addBotMessage(
+        addChatMessage(
 
-            "⚠️ Cannot connect to the Smart Queue Assistant.\n\n" +
-            "Please make sure Flask is running on port 5000."
+            "Unable to connect to the chatbot server. Please make sure the Flask backend is running.",
+
+            "bot"
 
         );
+
     }
+
 }
 
 
-// ============================================================
-// ADD USER MESSAGE
-// ============================================================
+// =====================================================
+// ENTER KEY
+// =====================================================
 
-function addUserMessage(message) {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    const messages =
+        const input =
+            document.getElementById(
+                "chatInput"
+            );
+
+
+        if (!input) {
+
+            console.error(
+                "Chat input not found."
+            );
+
+            return;
+
+        }
+
+
+        input.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    sendMessage();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+// =====================================================
+// CLEAR CHAT
+// =====================================================
+
+function clearChat() {
+
+    const chatMessages =
         document.getElementById(
-            "chatbotMessages"
+            "chatMessages"
         );
 
 
-    if (!messages) {
-
+    if (!chatMessages) {
         return;
     }
 
 
-    const div =
-        document.createElement(
-            "div"
-        );
+    chatMessages.innerHTML = "";
 
 
-    div.className =
-        "chat-message user-message";
+    addChatMessage(
 
+        "Hello! I can help you with your token number, queue position, people waiting, queue status and estimated waiting time.",
 
-    div.innerText =
-        message;
+        "bot"
 
-
-    messages.appendChild(
-        div
     );
 
-
-    scrollChat();
 }
 
 
-// ============================================================
-// ADD BOT MESSAGE
-// ============================================================
-
-function addBotMessage(message) {
-
-    const messages =
-        document.getElementById(
-            "chatbotMessages"
-        );
-
-
-    if (!messages) {
-
-        return null;
-    }
-
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    div.className =
-        "chat-message bot-message";
-
-
-    div.innerText =
-        message;
-
-
-    messages.appendChild(
-        div
-    );
-
-
-    scrollChat();
-
-
-    return div;
-}
-
-
-// ============================================================
-// SCROLL CHAT TO BOTTOM
-// ============================================================
-
-function scrollChat() {
-
-    const messages =
-        document.getElementById(
-            "chatbotMessages"
-        );
-
-
-    if (messages) {
-
-        messages.scrollTop =
-            messages.scrollHeight;
-    }
-}
-
-
-// ============================================================
-// ENTER KEY
-// ============================================================
-
-function handleChatbotKey(event) {
-
-    if (
-        event.key === "Enter"
-    ) {
-
-        event.preventDefault();
-
-        sendChatMessage();
-    }
-}
-
-
-// ============================================================
-// SUGGESTED QUESTION
-// ============================================================
+// =====================================================
+// SUGGESTED QUESTIONS
+// =====================================================
 
 function askSuggestedQuestion(
     question
@@ -497,12 +446,11 @@ function askSuggestedQuestion(
 
     const input =
         document.getElementById(
-            "chatbotInput"
+            "chatInput"
         );
 
 
     if (!input) {
-
         return;
     }
 
@@ -511,202 +459,6 @@ function askSuggestedQuestion(
         question;
 
 
-    sendChatMessage();
+    sendMessage();
+
 }
-
-
-// ============================================================
-// CLEAR CHAT
-// ============================================================
-
-function clearChat() {
-
-    const messages =
-        document.getElementById(
-            "chatbotMessages"
-        );
-
-
-    if (!messages) {
-
-        return;
-    }
-
-
-    messages.innerHTML = "";
-
-
-    addBotMessage(
-
-        "Hello! 👋\n\n" +
-
-        "I am your Smart Queue Assistant. 🤖\n\n" +
-
-        "I can help you check:\n" +
-
-        "🎫 Your token number\n" +
-
-        "👥 People waiting\n" +
-
-        "⏱️ Estimated waiting time\n" +
-
-        "📍 Your queue\n" +
-
-        "🏢 Service type\n" +
-
-        "🪟 Active counters\n" +
-
-        "📊 Queue status\n\n" +
-
-        "Ask me anything about your current queue."
-
-    );
-}
-
-
-// ============================================================
-// INITIAL CHATBOT MESSAGE
-// ============================================================
-
-function showWelcomeMessage() {
-
-    const messages =
-        document.getElementById(
-            "chatbotMessages"
-        );
-
-
-    if (!messages) {
-
-        return;
-    }
-
-
-    // Don't add duplicate welcome message
-    if (
-        messages.children.length > 0
-    ) {
-
-        return;
-    }
-
-
-    const user =
-        getLoggedInUser();
-
-
-    if (!user) {
-
-        addBotMessage(
-
-            "Hello! 👋\n\n" +
-
-            "Please login first to use the Smart Queue Assistant."
-
-        );
-
-        return;
-    }
-
-
-    addBotMessage(
-
-        "Hello, " +
-        (user.name || "User") +
-        "! 👋\n\n" +
-
-        "I am your Smart Queue Assistant. 🤖\n\n" +
-
-        "I can help you with your current queue.\n\n" +
-
-        "You can ask:\n" +
-
-        "🎫 What is my token?\n" +
-
-        "👥 How many people are waiting?\n" +
-
-        "⏱️ How long do I need to wait?\n" +
-
-        "📍 Where is my queue?\n" +
-
-        "🏢 What service am I waiting for?\n" +
-
-        "🪟 How many counters are active?\n" +
-
-        "📊 What is the queue status?"
-
-    );
-}
-
-
-// ============================================================
-// LOGOUT SUPPORT
-// ============================================================
-
-function chatbotLogout() {
-
-    localStorage.removeItem(
-        "user"
-    );
-
-    localStorage.removeItem(
-        "queue_id"
-    );
-
-    localStorage.removeItem(
-        "userQueue"
-    );
-
-    window.location.href =
-        "login.html";
-}
-
-
-// ============================================================
-// PAGE LOAD
-// ============================================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const windowBox =
-            document.getElementById(
-                "chatbotWindow"
-            );
-
-
-        if (windowBox) {
-
-            windowBox.style.display =
-                "none";
-        }
-
-
-        showWelcomeMessage();
-
-
-        console.log(
-            "Smart Queue User Chatbot loaded successfully."
-        );
-
-
-        const user =
-            getLoggedInUser();
-
-
-        if (user) {
-
-            console.log(
-                "Logged-in user:",
-                user.name
-            );
-
-            console.log(
-                "User ID:",
-                user.id
-            );
-        }
-
-    }
-);

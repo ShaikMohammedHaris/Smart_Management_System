@@ -1,253 +1,312 @@
-/* =========================================================
-   SMART QUEUE PREDICTOR - REGISTER PAGE
-   ========================================================= */
+/* ============================================================
+   SMART QUEUE PREDICTOR
+   REGISTER PAGE
+   ============================================================ */
+
+
+/* ============================================================
+   RESET
+   ============================================================ */
 
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
+
+/* ============================================================
+   BODY
+   ============================================================ */
+
 body {
-    font-family: "Segoe UI", Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 
     min-height: 100vh;
 
     background:
-        radial-gradient(
-            circle at 10% 15%,
-            rgba(37, 99, 235, 0.18),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 90% 85%,
-            rgba(124, 58, 237, 0.18),
-            transparent 30%
-        ),
         linear-gradient(
             135deg,
-            #eef4ff,
-            #f8f6ff
+            #eef6ff 0%,
+            #f5f3ff 50%,
+            #eef7ff 100%
         );
+
+    color: #1f2937;
 
     display: flex;
 
+    justify-content: center;
+
     align-items: center;
+
+    padding: 30px 15px;
+}
+
+
+/* ============================================================
+   MAIN CONTAINER
+   ============================================================ */
+
+.register-container {
+    width: 100%;
+
+    max-width: 520px;
+
+    display: flex;
 
     justify-content: center;
 
-    padding: 30px;
-
-    color: #172554;
+    align-items: center;
 }
 
 
-/* Register Card */
+/* ============================================================
+   REGISTER CARD
+   ============================================================ */
 
-.register-container,
 .register-card {
     width: 100%;
 
-    max-width: 480px;
-
-    background: rgba(255, 255, 255, 0.97);
-
-    padding: 40px;
+    background: #ffffff;
 
     border-radius: 24px;
 
+    padding: 35px 45px;
+
     box-shadow:
-        0 20px 60px rgba(37, 99, 235, 0.15),
-        0 5px 20px rgba(0, 0, 0, 0.08);
+        0 15px 40px rgba(0, 0, 0, 0.12);
 
-    position: relative;
+    border-top: 6px solid #315eea;
 
-    overflow: hidden;
+    text-align: center;
 }
 
 
-/* Gradient Top Border */
+/* ============================================================
+   LOGO
+   ============================================================ */
 
-.register-container::before,
-.register-card::before {
-    content: "";
+.logo-container {
+    display: flex;
 
-    position: absolute;
+    justify-content: center;
 
-    top: 0;
-    left: 0;
+    align-items: center;
 
-    width: 100%;
-    height: 6px;
-
-    background: linear-gradient(
-        90deg,
-        #2563eb,
-        #4f46e5,
-        #7c3aed
-    );
+    margin-bottom: 20px;
 }
 
 
-/* Logo */
+.logo {
+    width: 150px;
 
-.register-logo {
-    width: 100px;
+    height: 150px;
 
-    height: 100px;
+    max-width: 150px;
+
+    max-height: 150px;
 
     object-fit: contain;
 
     display: block;
 
-    margin: 0 auto 18px;
+    border-radius: 12px;
 }
 
 
-/* Heading */
+/* ============================================================
+   TITLE
+   ============================================================ */
 
-.register-container h1,
 .register-card h1 {
-    text-align: center;
+    font-size: 34px;
 
-    font-size: 30px;
+    color: #1f4f91;
 
-    color: #173b82;
+    margin-bottom: 8px;
 
-    font-weight: 800;
+    font-weight: 700;
+}
+
+
+.subtitle {
+    font-size: 16px;
+
+    color: #64748b;
+
+    margin-bottom: 28px;
+}
+
+
+/* ============================================================
+   FORM
+   ============================================================ */
+
+#registerForm {
+    width: 100%;
+
+    text-align: left;
+}
+
+
+/* ============================================================
+   FORM GROUP
+   ============================================================ */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+
+.form-group label {
+    display: block;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: #1f2937;
 
     margin-bottom: 8px;
 }
 
 
-/* Subtitle */
+/* ============================================================
+   INPUT
+   ============================================================ */
 
-.register-container > p,
-.register-card > p {
-    text-align: center;
+.form-group input {
+    width: 100%;
 
-    color: #64748b;
+    height: 52px;
 
-    margin-bottom: 25px;
+    padding: 0 16px;
 
-    font-size: 14px;
+    border: 1px solid #cbd5e1;
 
-    line-height: 1.5;
+    border-radius: 11px;
+
+    background: #f8fafc;
+
+    font-size: 16px;
+
+    color: #111827;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
 }
 
 
-/* Labels */
+.form-group input:focus {
+    border-color: #315eea;
 
-label {
-    display: block;
+    background: #ffffff;
 
-    margin-top: 15px;
+    box-shadow:
+        0 0 0 3px rgba(49, 94, 234, 0.12);
+}
 
-    margin-bottom: 7px;
+
+.form-group input::placeholder {
+    color: #94a3b8;
+}
+
+
+/* ============================================================
+   MESSAGE
+   ============================================================ */
+
+.message {
+    min-height: 24px;
+
+    margin: 5px 0 12px;
+
+    text-align: center;
 
     font-size: 14px;
 
     font-weight: 600;
-
-    color: #334155;
 }
 
 
-/* Inputs */
+/* ============================================================
+   REGISTER BUTTON
+   ============================================================ */
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-.register-container input,
-.register-card input {
+.register-button {
     width: 100%;
 
-    padding: 14px 16px;
-
-    border-radius: 12px;
-
-    border: 1px solid #dbe3f0;
-
-    background: #f8fafc;
-
-    font-size: 15px;
-
-    color: #1e293b;
-
-    outline: none;
-
-    transition: 0.25s;
-}
-
-
-input:focus {
-    background: white;
-
-    border-color: #2563eb;
-
-    box-shadow:
-        0 0 0 4px rgba(37, 99, 235, 0.10);
-}
-
-
-/* Register Button */
-
-button,
-.register-btn {
-    width: 100%;
-
-    margin-top: 25px;
-
-    padding: 14px;
+    height: 54px;
 
     border: none;
 
-    border-radius: 12px;
+    border-radius: 11px;
 
-    background: linear-gradient(
-        135deg,
-        #2563eb,
-        #4f46e5
-    );
+    background:
+        linear-gradient(
+            90deg,
+            #2563eb,
+            #4f46e5
+        );
 
-    color: white;
+    color: #ffffff;
 
-    font-size: 16px;
+    font-size: 17px;
 
     font-weight: 700;
 
     cursor: pointer;
 
-    transition: 0.25s;
-
-    box-shadow:
-        0 8px 20px rgba(37, 99, 235, 0.25);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
 }
 
 
-button:hover,
-.register-btn:hover {
+.register-button:hover {
     transform: translateY(-2px);
 
     box-shadow:
-        0 12px 25px rgba(37, 99, 235, 0.35);
+        0 8px 20px rgba(37, 99, 235, 0.3);
 }
 
 
-/* Login Link */
+.register-button:active {
+    transform: translateY(0);
+}
 
-.login-link {
-    text-align: center;
 
-    margin-top: 22px;
+.register-button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* ============================================================
+   LOGIN TEXT
+   ============================================================ */
+
+.login-text {
+    margin-top: 25px;
+
+    font-size: 15px;
 
     color: #64748b;
-
-    font-size: 14px;
 }
 
 
-.login-link a {
+.login-text a {
     color: #2563eb;
 
     font-weight: 700;
@@ -256,39 +315,73 @@ button:hover,
 }
 
 
-.login-link a:hover {
+.login-text a:hover {
     text-decoration: underline;
 }
 
 
-/* Message */
+/* ============================================================
+   HOME LINK
+   ============================================================ */
 
-#message,
-#error {
-    text-align: center;
+.home-link {
+    display: inline-block;
 
-    margin-top: 15px;
+    margin-top: 20px;
 
-    font-size: 14px;
+    color: #2563eb;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    text-decoration: none;
 }
 
 
-/* Mobile */
+.home-link:hover {
+    text-decoration: underline;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
 @media (max-width: 600px) {
 
     body {
-        padding: 15px;
+        padding: 20px 12px;
+
+        align-items: flex-start;
     }
 
-    .register-container,
+
     .register-card {
-        padding: 30px 22px;
+        padding: 28px 22px;
+
+        border-radius: 18px;
     }
 
-    .register-container h1,
+
+    .logo {
+        width: 120px;
+
+        height: 120px;
+
+        max-width: 120px;
+
+        max-height: 120px;
+    }
+
+
     .register-card h1 {
-        font-size: 26px;
+        font-size: 28px;
+    }
+
+
+    .subtitle {
+        font-size: 14px;
     }
 
 }

@@ -2,670 +2,645 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>User Dashboard - Smart Queue Predictor</title>
 
-    <title>
-        User Dashboard - Smart Queue Predictor
-    </title>
-
-
-    <!-- DASHBOARD CSS -->
-    <link
-        rel="stylesheet"
-        href="css/dashboard.css"
-    >
-
-
-    <!-- CHATBOT CSS -->
-    <link
-        rel="stylesheet"
-        href="css/chatbot.css"
-    >
-
+    <!-- Common CSS for EVERY user -->
+    <link rel="stylesheet" href="css/dashboard.css?v=10">
 </head>
-
 
 <body>
 
+    <!-- ================= HEADER ================= -->
 
-<!-- =========================================================
-     MAIN DASHBOARD
-========================================================= -->
+    <header class="dashboard-header">
 
-<div class="container">
+        <div class="header-content">
+
+            <div class="header-left">
+
+                <h1>Smart Queue Management System</h1>
+
+                <p id="welcomeUser">
+                    Welcome to Smart Queue Predictor
+                </p>
+
+            </div>
+
+            <div class="header-video">
+
+                <video
+                    class="dashboard-video"
+                    controls
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                >
+                    <source
+                        src="videos/queue_analyzer.mp4"
+                        type="video/mp4"
+                    >
+
+                    Your browser does not support the video tag.
+
+                </video>
+
+            </div>
+
+        </div>
+
+    </header>
 
 
-    <!-- HEADER -->
+    <!-- ================= MAIN ================= -->
 
-    <div class="dashboard-header">
+    <main class="dashboard-container">
 
-        <div>
 
-            <h1>
-                Smart Queue Management System
-            </h1>
+        <!-- ================= JOIN QUEUE ================= -->
 
-            <p id="welcome">
-                Welcome to Smart Queue Predictor
+        <section class="dashboard-card">
+
+            <div class="card-title">
+
+                <span class="card-icon">🎫</span>
+
+                <div>
+                    <h2>Join Queue</h2>
+
+                    <p>
+                        Enter the queue ID to join a queue.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="queueId">
+                    Queue ID
+                </label>
+
+                <input
+                    type="number"
+                    id="queueId"
+                    min="1"
+                    placeholder="Enter Queue ID"
+                >
+
+            </div>
+
+
+            <button
+                type="button"
+                class="primary-button"
+                onclick="joinQueue()"
+            >
+                🎟️ Join Queue
+            </button>
+
+
+            <p
+                id="joinMessage"
+                class="message"
+            ></p>
+
+        </section>
+
+
+
+        <!-- ================= TOKEN ================= -->
+
+        <section class="dashboard-card token-card">
+
+            <div class="card-title centered-title">
+
+                <span class="card-icon">🎫</span>
+
+                <h2>Your Token</h2>
+
+            </div>
+
+
+            <div class="token-box">
+
+                <div class="token-label">
+                    Your Token Number
+                </div>
+
+                <div
+                    id="tokenNumber"
+                    class="token-number"
+                >
+                    -
+                </div>
+
+            </div>
+
+
+            <p id="tokenMessage">
+                Your token number will appear here after joining a queue.
             </p>
 
-        </div>
-
-    </div>
+        </section>
 
 
-    <!-- =====================================================
-         JOIN QUEUE
-    ====================================================== -->
 
-    <section class="dashboard-card">
+        <!-- ================= QUEUE INFORMATION ================= -->
 
-        <h2>
-            🎫 Join Queue
-        </h2>
+        <section class="dashboard-card">
 
-        <p>
-            Enter the queue ID to join a queue.
-        </p>
+            <div class="card-title">
+
+                <span class="card-icon">📋</span>
+
+                <div>
+                    <h2>My Queue Information</h2>
+
+                    <p>
+                        Your current queue details
+                    </p>
+                </div>
+
+            </div>
 
 
-        <div class="form-group">
+            <div class="queue-grid">
 
-            <label for="queueId">
-                Queue ID
-            </label>
 
-            <input
-                type="number"
-                id="queueId"
-                placeholder="Enter Queue ID"
-                min="1"
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Queue Name
+                    </span>
+
+                    <strong id="userQueueName">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Service Type
+                    </span>
+
+                    <strong id="userServiceType">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        People Waiting
+                    </span>
+
+                    <strong id="userPeopleWaiting">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        People Ahead
+                    </span>
+
+                    <strong id="userPeopleAhead">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Queue Position
+                    </span>
+
+                    <strong id="userPosition">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Queue Status
+                    </span>
+
+                    <strong
+                        id="userQueueStatus"
+                        class="status-active"
+                    >
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Active Counters
+                    </span>
+
+                    <strong id="userActiveCounters">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Average Service Time
+                    </span>
+
+                    <strong id="userAverageServiceTime">
+                        -
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= WAITING TIME PREDICTION ================= -->
+
+        <section class="dashboard-card">
+
+            <div class="card-title">
+
+                <span class="card-icon">⏱️</span>
+
+                <div>
+
+                    <h2>
+                        Waiting Time Prediction
+                    </h2>
+
+                    <p>
+                        Predict your estimated waiting time using the current queue information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="prediction-grid">
+
+
+                <div class="form-group">
+
+                    <label for="queueLength">
+                        Queue Length
+                    </label>
+
+                    <input
+                        type="number"
+                        id="queueLength"
+                        min="0"
+                        placeholder="People waiting"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="counters">
+                        Active Counters
+                    </label>
+
+                    <input
+                        type="number"
+                        id="counters"
+                        min="1"
+                        placeholder="Number of counters"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="serviceTime">
+                        Average Service Time
+                    </label>
+
+                    <input
+                        type="number"
+                        id="serviceTime"
+                        min="1"
+                        step="0.1"
+                        placeholder="Minutes"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="arrivalRate">
+                        Arrival Rate
+                    </label>
+
+                    <input
+                        type="number"
+                        id="arrivalRate"
+                        min="0"
+                        step="0.1"
+                        value="1"
+                        placeholder="Customers/hour"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <button
+                type="button"
+                class="primary-button prediction-button"
+                onclick="predictTime()"
             >
-
-        </div>
-
-
-        <button
-            type="button"
-            onclick="joinQueue()"
-        >
-            🎫 Join Queue
-        </button>
+                🔮 Predict Waiting Time
+            </button>
 
 
-        <div
-            id="joinMessage"
-            class="message"
-        ></div>
+            <div class="prediction-result">
 
-    </section>
+                <h3>
+                    Estimated Waiting Time
+                </h3>
 
+                <div class="prediction-value">
 
+                    <span id="prediction">
+                        0.00
+                    </span>
 
-    <!-- =====================================================
-         YOUR TOKEN
-    ====================================================== -->
+                    <span class="prediction-unit">
+                        minutes
+                    </span>
 
-    <section class="dashboard-card">
-
-        <h2>
-            🎟️ Your Token
-        </h2>
-
-        <div
-            id="token"
-            class="token-display"
-        >
-            -
-        </div>
-
-        <p>
-            Your token number will appear here
-            after joining a queue.
-        </p>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         QUEUE INFORMATION
-    ====================================================== -->
-
-    <section class="dashboard-card">
-
-        <h2>
-            📋 Queue Information
-        </h2>
-
-
-        <div class="info-grid">
-
-
-            <div class="info-box">
-
-                <span>
-                    Queue Name
-                </span>
-
-                <strong id="userQueueName">
-                    -
-                </strong>
+                </div>
 
             </div>
 
-
-            <div class="info-box">
-
-                <span>
-                    Service Type
-                </span>
-
-                <strong id="userServiceType">
-                    -
-                </strong>
-
-            </div>
+        </section>
 
 
-            <div class="info-box">
 
-                <span>
-                    People Waiting
-                </span>
+        <!-- ================= CHATBOT ================= -->
 
-                <strong id="userPeopleWaiting">
-                    -
-                </strong>
+        <section class="dashboard-card chatbot-section">
 
-            </div>
+            <div class="card-title">
 
+                <span class="card-icon">🤖</span>
 
-            <div class="info-box">
+                <div>
 
-                <span>
-                    People Ahead
-                </span>
+                    <h2>
+                        Customer Support
+                    </h2>
 
-                <strong id="userPeopleAhead">
-                    -
-                </strong>
+                    <p>
+                        Ask about your token, queue position, people waiting,
+                        queue status or estimated waiting time.
+                    </p>
+
+                </div>
 
             </div>
 
-
-            <div class="info-box">
-
-                <span>
-                    Queue Position
-                </span>
-
-                <strong id="userPosition">
-                    -
-                </strong>
-
-            </div>
-
-
-            <div class="info-box">
-
-                <span>
-                    Queue Status
-                </span>
-
-                <strong id="userQueueStatus">
-                    -
-                </strong>
-
-            </div>
-
-
-            <div class="info-box">
-
-                <span>
-                    Active Counters
-                </span>
-
-                <strong id="userActiveCounters">
-                    -
-                </strong>
-
-            </div>
-
-
-            <div class="info-box">
-
-                <span>
-                    Average Service Time
-                </span>
-
-                <strong id="userAverageServiceTime">
-                    -
-                </strong>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         WAITING TIME PREDICTION
-    ====================================================== -->
-
-    <section class="dashboard-card">
-
-        <h2>
-            🤖 Waiting Time Prediction
-        </h2>
-
-
-        <div class="prediction-inputs">
-
-
-            <div class="form-group">
-
-                <label for="queueLength">
-                    Queue Length
-                </label>
-
-                <input
-                    type="number"
-                    id="queueLength"
-                    placeholder="Queue Length"
-                    min="0"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="counters">
-                    Active Counters
-                </label>
-
-                <input
-                    type="number"
-                    id="counters"
-                    placeholder="Active Counters"
-                    min="1"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="serviceTime">
-                    Average Service Time
-                </label>
-
-                <input
-                    type="number"
-                    id="serviceTime"
-                    placeholder="Average Service Time"
-                    min="0"
-                    step="0.1"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="arrivalRate">
-                    Arrival Rate
-                </label>
-
-                <input
-                    type="number"
-                    id="arrivalRate"
-                    placeholder="Arrival Rate"
-                    min="0"
-                    step="0.1"
-                >
-
-            </div>
-
-        </div>
-
-
-        <button
-            type="button"
-            onclick="predictTime()"
-        >
-            🤖 Predict Waiting Time
-        </button>
-
-
-        <div class="prediction-result">
-
-            <h3>
-                Predicted Waiting Time
-            </h3>
 
             <div
-                id="prediction"
-                class="prediction-value"
+                id="chatMessages"
+                class="chat-messages"
             >
-                -
-            </div>
 
-            <span>
-                minutes
-            </span>
+                <div class="bot-message">
 
-        </div>
+                    Hello! 👋
 
-    </section>
+                    I can help you with your token,
+                    queue position, people waiting,
+                    queue status and estimated waiting time.
 
-
-
-    <!-- =====================================================
-         REFRESH BUTTON
-    ====================================================== -->
-
-    <section class="dashboard-actions">
-
-        <button
-            type="button"
-            onclick="loadUserQueue()"
-        >
-            🔄 Refresh Queue
-        </button>
-
-        <button
-            type="button"
-            onclick="logout()"
-        >
-            🚪 Logout
-        </button>
-
-    </section>
-
-
-</div>
-
-
-
-<!-- =========================================================
-     SMART QUEUE ASSISTANT
-========================================================= -->
-
-
-<!-- CHATBOT FLOATING BUTTON -->
-
-<button
-    class="chatbot-button"
-    onclick="toggleChatbot()"
-    title="Smart Queue Assistant"
->
-    🤖
-</button>
-
-
-
-<!-- CHATBOT WINDOW -->
-
-<div
-    id="chatbotWindow"
-    class="chatbot-window"
->
-
-
-    <!-- =====================================================
-         CHATBOT HEADER
-    ====================================================== -->
-
-    <div class="chatbot-header">
-
-
-        <div class="chatbot-title">
-
-
-            <div class="chatbot-icon">
-                🤖
-            </div>
-
-
-            <div class="chatbot-title-text">
-
-                <strong>
-                    Smart Queue Assistant
-                </strong>
-
-                <span>
-                    Customer Support
-                </span>
+                </div>
 
             </div>
 
 
-        </div>
+            <div class="chat-suggestions">
+
+                <button
+                    type="button"
+                    onclick="askSuggestedQuestion('What is my token number?')"
+                >
+                    My Token
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="askSuggestedQuestion('How many people are waiting?')"
+                >
+                    People Waiting
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="askSuggestedQuestion('How many people are ahead of me?')"
+                >
+                    People Ahead
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="askSuggestedQuestion('What is my estimated waiting time?')"
+                >
+                    Waiting Time
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="askSuggestedQuestion('What is my queue status?')"
+                >
+                    Queue Status
+                </button>
+
+            </div>
+
+
+            <div class="chat-input-container">
+
+                <input
+                    type="text"
+                    id="chatInput"
+                    placeholder="Ask something about your queue..."
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    onclick="sendMessage()"
+                >
+                    Send
+                </button>
+
+            </div>
+
+        </section>
 
 
 
-        <div class="chatbot-header-buttons">
+        <!-- ================= MESSAGE ================= -->
 
+        <div
+            id="message"
+            class="dashboard-message"
+        ></div>
+
+
+
+        <!-- ================= LOGOUT ================= -->
+
+        <div class="logout-container">
 
             <button
                 type="button"
-                onclick="clearChat()"
-                title="Clear Chat"
+                class="logout-button"
+                onclick="logout()"
             >
-                🗑️
+                🚪 Logout
             </button>
-
-
-            <button
-                type="button"
-                onclick="closeChatbot()"
-                title="Close"
-            >
-                ✕
-            </button>
-
 
         </div>
 
 
-    </div>
+    </main>
 
 
 
-    <!-- =====================================================
-         CHAT MESSAGES
-    ====================================================== -->
+    <!-- ================= JAVASCRIPT ================= -->
 
-    <div
-        id="chatbotMessages"
-        class="chatbot-messages"
-    >
+    <script src="js/dashboard.js?v=10"></script>
+    <script src="js/chatbot.js?v=10"></script>
 
-        <div class="chat-message bot-message">
 
-            Hello! 👋
+    <script>
 
-            I am your Smart Queue Assistant. 🤖
+        /*
+         * IMPORTANT:
+         *
+         * This code changes ONLY the user's name.
+         *
+         * It does NOT change CSS.
+         * It does NOT create different dashboard designs.
+         */
 
-            I can help you with your current queue.
+        document.addEventListener("DOMContentLoaded", function () {
 
-            You can ask me about:
+            try {
 
-            🎫 Your token number
+                const userData =
+                    localStorage.getItem("user");
 
-            👥 People waiting
+                if (!userData) {
+                    return;
+                }
 
-            👤 People ahead of you
+                const user =
+                    JSON.parse(userData);
 
-            🔢 Your queue position
+                if (user && user.name) {
 
-            ⏱️ Estimated waiting time
+                    const welcome =
+                        document.getElementById("welcomeUser");
 
-            📋 Your queue
+                    if (welcome) {
 
-            🛎️ Service type
+                        welcome.innerText =
+                            "Welcome, " +
+                            user.name +
+                            " to Smart Queue Predictor";
 
-            🏢 Active counters
+                    }
 
-            📍 Queue status
+                }
 
-        </div>
+            } catch (error) {
 
-    </div>
+                console.error(
+                    "Could not read logged-in user:",
+                    error
+                );
 
+            }
 
+        });
 
-    <!-- =====================================================
-         SUGGESTED QUESTIONS
-    ====================================================== -->
 
-    <div class="chatbot-suggestions">
 
+        /*
+         * Press ENTER in chatbot input
+         */
 
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('What is my token?')"
-        >
-            🎫 My Token
-        </button>
+        document.addEventListener("DOMContentLoaded", function () {
 
+            const chatInput =
+                document.getElementById("chatInput");
 
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('How many people are waiting?')"
-        >
-            👥 People Waiting
-        </button>
+            if (chatInput) {
 
+                chatInput.addEventListener(
+                    "keydown",
+                    function (event) {
 
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('How many people are ahead of me?')"
-        >
-            👤 People Ahead
-        </button>
+                        if (event.key === "Enter") {
 
+                            event.preventDefault();
 
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('What is my position?')"
-        >
-            🔢 My Position
-        </button>
+                            sendMessage();
 
+                        }
 
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('How long do I need to wait?')"
-        >
-            ⏱️ Waiting Time
-        </button>
+                    }
+                );
 
+            }
 
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('Which queue am I in?')"
-        >
-            📋 My Queue
-        </button>
+        });
 
-
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('What service am I waiting for?')"
-        >
-            🛎️ Service
-        </button>
-
-
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('How many counters are active?')"
-        >
-            🏢 Counters
-        </button>
-
-
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('What is my queue status?')"
-        >
-            📍 Status
-        </button>
-
-
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('Is my turn near?')"
-        >
-            🔔 My Turn
-        </button>
-
-
-        <button
-            type="button"
-            onclick="askSuggestedQuestion('Help')"
-        >
-            ❓ Help
-        </button>
-
-
-    </div>
-
-
-
-    <!-- =====================================================
-         CHAT INPUT
-    ====================================================== -->
-
-    <div class="chatbot-input-area">
-
-
-        <input
-            id="chatbotInput"
-            class="chatbot-input"
-            type="text"
-            placeholder="Ask about your queue..."
-            autocomplete="off"
-            onkeydown="handleChatbotKey(event)"
-        >
-
-
-        <button
-            type="button"
-            class="chatbot-send"
-            onclick="sendChatMessage()"
-            title="Send"
-        >
-            ➤
-        </button>
-
-
-    </div>
-
-
-</div>
-
-
-
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
-
-
-<script src="js/dashboard.js"></script>
-
-<script src="js/chatbot.js"></script>
+    </script>
 
 
 </body>

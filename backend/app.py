@@ -7,24 +7,21 @@ from backend.routes.auth import auth
 from backend.routes.queue import queue
 from backend.routes.prediction import prediction
 from backend.routes.admin import admin
-
-# CHATBOT
 from backend.chatbot import chatbot
 
 
+# Create Flask application
 app = Flask(__name__)
 
+# Allow frontend to communicate with backend
 CORS(app)
 
 
-# Initialize database
+# Initialize SQLite database
 initialize_database()
 
 
-# ============================================================
-# REGISTER ROUTES
-# ============================================================
-
+# Register API routes
 app.register_blueprint(
     auth,
     url_prefix="/api/auth"
@@ -45,47 +42,35 @@ app.register_blueprint(
     url_prefix="/api/admin"
 )
 
-# CHATBOT
 app.register_blueprint(
     chatbot,
     url_prefix="/api/chatbot"
 )
 
 
-# ============================================================
-# HOME
-# ============================================================
-
+# Home API
 @app.route("/")
 def home():
-
     return jsonify({
-        "message":
-        "Smart Queue Management System API is running"
+        "success": True,
+        "message": "Smart Queue Management System API is running"
     })
 
 
-# ============================================================
-# HEALTH
-# ============================================================
-
+# Health check
 @app.route("/api/health")
 def health():
-
     return jsonify({
+        "success": True,
         "status": "OK",
         "message": "Server is working"
     })
 
 
-# ============================================================
-# RUN
-# ============================================================
-
+# Start Flask server
 if __name__ == "__main__":
-
     app.run(
-        host="127.0.0.1",
+        host="0.0.0.0",
         port=5000,
         debug=False
     )

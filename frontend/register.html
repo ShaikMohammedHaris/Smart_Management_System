@@ -5,182 +5,184 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>
-        Register - Smart Queue Predictor
-    </title>
+    <title>Create Account - Smart Queue Predictor</title>
 
-    <!-- Register CSS -->
-
-    <link
-        rel="stylesheet"
-        href="css/register.css"
-    >
+    <link rel="stylesheet"
+          href="css/register.css">
 
 </head>
 
 
 <body>
 
-
-    <!-- =====================================================
-         REGISTER PAGE
-         ===================================================== -->
-
     <div class="register-container">
 
-
-        <!-- LOGO -->
-
-        <img
-            src="images/logo.png"
-            alt="Smart Queue Predictor Logo"
-            class="register-logo"
-        >
+        <div class="register-card">
 
 
-        <!-- TITLE -->
+            <!-- LOGO -->
 
-        <h1>
-            Create Account
-        </h1>
+            <div class="logo-container">
 
+                <img
+                    src="images/logo.png"
+                    alt="Smart Queue Predictor Logo"
+                    class="logo"
+                >
 
-        <p>
-            Register for Smart Queue Predictor
-        </p>
-
-
-        <!-- =================================================
-             REGISTER FORM
-             ================================================= -->
-
-        <form
-            id="registerForm"
-        >
+            </div>
 
 
-            <!-- NAME -->
+            <!-- TITLE -->
 
-            <label for="name">
-                Full Name
-            </label>
+            <h1>Create Account</h1>
+
+            <p class="subtitle">
+                Register for your Smart Queue account
+            </p>
 
 
-            <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Enter your full name"
-                required
+            <!-- REGISTER FORM -->
+
+            <form
+                id="registerForm"
+                autocomplete="off"
             >
 
 
-            <!-- EMAIL -->
+                <!-- NAME -->
 
-            <label for="email">
-                Email Address
-            </label>
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
 
 
-            <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Enter your email"
-                required
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Confirm your password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <p
+                    id="message"
+                    class="message"
+                ></p>
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="register-button"
+                >
+                    Create Account
+                </button>
+
+
+            </form>
+
+
+            <!-- LOGIN -->
+
+            <p class="login-text">
+
+                Already have an account?
+
+                <a href="login.html">
+                    Login
+                </a>
+
+            </p>
+
+
+            <!-- HOME -->
+
+            <a
+                href="index.html"
+                class="home-link"
             >
-
-
-            <!-- PASSWORD -->
-
-            <label for="password">
-                Password
-            </label>
-
-
-            <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Create a password"
-                required
-            >
-
-
-            <!-- CONFIRM PASSWORD -->
-
-            <label for="confirmPassword">
-                Confirm Password
-            </label>
-
-
-            <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Confirm your password"
-                required
-            >
-
-
-            <!-- REGISTER BUTTON -->
-
-            <button
-                type="submit"
-                id="registerButton"
-            >
-                Create Account
-            </button>
-
-
-            <!-- MESSAGE -->
-
-            <div
-                id="message"
-            ></div>
-
-
-        </form>
-
-
-        <!-- LOGIN LINK -->
-
-        <div class="login-link">
-
-            Already have an account?
-
-            <a href="login.html">
-                Login
-            </a>
-
-        </div>
-
-
-        <!-- HOME -->
-
-        <div class="login-link">
-
-            <a href="index.html">
                 ← Back to Home
             </a>
 
-        </div>
 
+        </div>
 
     </div>
 
 
-    <!-- REGISTER JAVASCRIPT -->
-
-    <script
-        src="js/register.js"
-    ></script>
-
+    <script src="js/register.js"></script>
 
 </body>
 
