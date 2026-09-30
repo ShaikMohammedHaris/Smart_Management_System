@@ -1,3 +1,14 @@
+/* =========================================================
+   SMART QUEUE MANAGEMENT SYSTEM
+   CUSTOMER DASHBOARD JAVASCRIPT
+   ========================================================= */
+
+
+/*
+ * True once the user types in the prediction form.
+ * While true, the 30-second refresh must NOT overwrite
+ * what the user entered.
+ */
 let predictionFormEdited = false;
 
 const API = "https://smart-queue-management-system-5vde.onrender.com";

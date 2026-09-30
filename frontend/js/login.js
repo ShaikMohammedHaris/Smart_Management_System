@@ -5,511 +5,292 @@
 
 const API = "https://smart-queue-management-system-5vde.onrender.com";
 
-
 /* =========================================================
    PAGE LOADED
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("=================================");
+  console.log("Smart Queue Login JS Loaded");
+  console.log("=================================");
 
-    console.log("=================================");
-    console.log("Smart Queue Login JS Loaded");
-    console.log("=================================");
+  const loginForm = document.getElementById("loginForm");
 
+  const emailInput = document.getElementById("email");
 
-    const loginForm =
-        document.getElementById("loginForm");
+  const passwordInput = document.getElementById("password");
 
-    const emailInput =
-        document.getElementById("email");
+  const message = document.getElementById("message");
 
-    const passwordInput =
-        document.getElementById("password");
-
-    const message =
-        document.getElementById("message");
-
-
-    /* =====================================================
+  /* =====================================================
        CHECK LOGIN FORM
        ===================================================== */
 
-    if (!loginForm) {
+  if (!loginForm) {
+    console.error("ERROR: Login form not found.");
 
-        console.error(
-            "ERROR: Login form not found."
-        );
+    return;
+  }
 
-        return;
-    }
+  console.log("Login form found successfully.");
 
-
-    console.log(
-        "Login form found successfully."
-    );
-
-
-    /* =====================================================
+  /* =====================================================
        LOGIN FORM SUBMIT
        ===================================================== */
 
-    loginForm.addEventListener(
-        "submit",
-        async function (event) {
+  loginForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-            event.preventDefault();
+    console.log("Login button clicked");
 
-
-            console.log(
-                "Login button clicked"
-            );
-
-
-            /* =============================================
+    /* =============================================
                GET INPUT VALUES
                ============================================= */
 
-            const email =
-                emailInput.value
-                    .trim()
-                    .toLowerCase();
+    const email = emailInput.value.trim().toLowerCase();
 
+    const password = passwordInput.value.trim();
 
-            const password =
-                passwordInput.value
-                    .trim();
+    console.log("Email entered:", email);
 
-
-            console.log(
-                "Email entered:",
-                email
-            );
-
-
-            /* =============================================
+    /* =============================================
                VALIDATE INPUT
                ============================================= */
 
-            if (!email) {
+    if (!email) {
+      message.innerText = "Please enter your email address.";
 
-                message.innerText =
-                    "Please enter your email address.";
+      message.style.color = "red";
 
-                message.style.color =
-                    "red";
+      emailInput.focus();
 
-                emailInput.focus();
+      return;
+    }
 
-                return;
-            }
+    if (!password) {
+      message.innerText = "Please enter your password.";
 
+      message.style.color = "red";
 
-            if (!password) {
+      passwordInput.focus();
 
-                message.innerText =
-                    "Please enter your password.";
+      return;
+    }
 
-                message.style.color =
-                    "red";
-
-                passwordInput.focus();
-
-                return;
-            }
-
-
-            /* =============================================
+    /* =============================================
                SHOW LOGIN STATUS
                ============================================= */
 
-            message.innerText =
-                "Logging in...";
+    message.innerText = "Logging in...";
 
-            message.style.color =
-                "#1976d2";
+    message.style.color = "#1976d2";
 
+    /*
+     * Prevent multiple clicks while
+     * login request is running.
+     */
 
-            /*
-             * Prevent multiple clicks while
-             * login request is running.
-             */
+    const loginButton = loginForm.querySelector('button[type="submit"]');
 
-            const loginButton =
-                loginForm.querySelector(
-                    'button[type="submit"]'
-                );
+    if (loginButton) {
+      loginButton.disabled = true;
 
+      loginButton.innerText = "Logging in...";
+    }
 
-            if (loginButton) {
-
-                loginButton.disabled =
-                    true;
-
-                loginButton.innerText =
-                    "Logging in...";
-
-            }
-
-
-            /* =============================================
+    /* =============================================
                SEND LOGIN REQUEST
                ============================================= */
 
-            try {
+    try {
+      console.log("Sending request to Flask...");
 
-                console.log(
-                    "Sending request to Flask..."
-                );
+      console.log("URL:", API + "/api/auth/login");
 
+      const response = await fetch(API + "/api/auth/login", {
+        method: "POST",
 
-                console.log(
-                    "URL:",
-                    API + "/api/auth/login"
-                );
+        headers: {
+          "Content-Type": "application/json",
+        },
 
+        body: JSON.stringify({
+          email: email,
 
-                const response =
-                    await fetch(
-                        API +
-                        "/api/auth/login",
-                        {
-                            method: "POST",
+          password: password,
+        }),
+      });
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
+      console.log("Server response status:", response.status);
 
-                            body: JSON.stringify({
-
-                                email: email,
-
-                                password: password
-
-                            })
-
-                        }
-                    );
-
-
-                console.log(
-                    "Server response status:",
-                    response.status
-                );
-
-
-                /* =========================================
+      /* =========================================
                    READ SERVER RESPONSE
                    ========================================= */
 
-                let data;
+      let data;
 
-                try {
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.error("Invalid JSON response:", jsonError);
 
-                    data =
-                        await response.json();
+        message.innerText = "Invalid response from server.";
 
-                } catch (jsonError) {
+        message.style.color = "red";
 
-                    console.error(
-                        "Invalid JSON response:",
-                        jsonError
-                    );
+        return;
+      }
 
+      console.log("Server response:", data);
 
-                    message.innerText =
-                        "Invalid response from server.";
-
-                    message.style.color =
-                        "red";
-
-                    return;
-
-                }
-
-
-                console.log(
-                    "Server response:",
-                    data
-                );
-
-
-                /* =========================================
+      /* =========================================
                    LOGIN FAILED
                    ========================================= */
 
-                if (
-                    !response.ok ||
-                    !data.success
-                ) {
+      if (!response.ok || !data.success) {
+        message.innerText = data.message || "Invalid email or password.";
 
-                    message.innerText =
-                        data.message ||
-                        "Invalid email or password.";
+        message.style.color = "red";
 
-                    message.style.color =
-                        "red";
+        console.log("LOGIN FAILED");
 
+        /*
+         * Allow user to try again.
+         */
 
-                    console.log(
-                        "LOGIN FAILED"
-                    );
+        if (loginButton) {
+          loginButton.disabled = false;
 
+          loginButton.innerText = "Login";
+        }
 
-                    /*
-                     * Allow user to try again.
-                     */
+        return;
+      }
 
-                    if (loginButton) {
-
-                        loginButton.disabled =
-                            false;
-
-                        loginButton.innerText =
-                            "Login";
-
-                    }
-
-
-                    return;
-
-                }
-
-
-                /* =========================================
+      /* =========================================
                    LOGIN SUCCESSFUL
                    ========================================= */
 
-                console.log(
-                    "================================="
-                );
+      console.log("=================================");
 
-                console.log(
-                    "LOGIN SUCCESSFUL"
-                );
+      console.log("LOGIN SUCCESSFUL");
 
-                console.log(
-                    "User:",
-                    data.user
-                );
+      console.log("User:", data.user);
 
-                console.log(
-                    "================================="
-                );
+      console.log("=================================");
 
-
-                /* =========================================
+      /* =========================================
                    CHECK USER DATA
                    ========================================= */
 
-                if (!data.user) {
+      if (!data.user) {
+        console.error("User information missing from response.");
 
-                    console.error(
-                        "User information missing from response."
-                    );
+        message.innerText =
+          "Login successful, but user information is missing.";
 
+        message.style.color = "red";
 
-                    message.innerText =
-                        "Login successful, but user information is missing.";
+        if (loginButton) {
+          loginButton.disabled = false;
 
-                    message.style.color =
-                        "red";
+          loginButton.innerText = "Login";
+        }
 
+        return;
+      }
 
-                    if (loginButton) {
-
-                        loginButton.disabled =
-                            false;
-
-                        loginButton.innerText =
-                            "Login";
-
-                    }
-
-
-                    return;
-
-                }
-
-
-                /* =========================================
+      /* =========================================
                    SAVE USER INFORMATION
                    ========================================= */
 
-                localStorage.setItem(
-                    "user",
-                    JSON.stringify(
-                        data.user
-                    )
-                );
+      localStorage.setItem("user", JSON.stringify(data.user));
 
+      /*
+       * Remove old queue information
+       * when a different user logs in.
+       */
 
-                /*
-                 * Remove old queue information
-                 * when a different user logs in.
-                 */
+      localStorage.removeItem("queue_id");
 
-                localStorage.removeItem(
-                    "queue_id"
-                );
+      localStorage.removeItem("userQueue");
 
-                localStorage.removeItem(
-                    "userQueue"
-                );
+      console.log("User saved in localStorage:");
 
+      console.log(localStorage.getItem("user"));
 
-                console.log(
-                    "User saved in localStorage:"
-                );
-
-                console.log(
-                    localStorage.getItem(
-                        "user"
-                    )
-                );
-
-
-                /* =========================================
+      /* =========================================
                    SHOW SUCCESS MESSAGE
                    ========================================= */
 
-                message.innerText =
-                    "Login successful! Redirecting...";
+      message.innerText = "Login successful! Redirecting...";
 
-                message.style.color =
-                    "green";
+      message.style.color = "green";
 
-
-                /* =========================================
+      /* =========================================
                    REDIRECT USER
                    ========================================= */
 
-                setTimeout(
-                    function () {
+      setTimeout(function () {
+        /*
+         * ADMIN
+         */
 
-                        /*
-                         * ADMIN
-                         */
+        if (data.user.role && data.user.role.toLowerCase() === "admin") {
+          console.log("Redirecting to Admin Dashboard");
 
-                        if (
-                            data.user.role &&
-                            data.user.role.toLowerCase() ===
-                            "admin"
-                        ) {
+          window.location.href = "admin.html";
+        } else {
 
-                            console.log(
-                                "Redirecting to Admin Dashboard"
-                            );
+        /*
+         * NORMAL USER
+         */
+          console.log("Redirecting to User Dashboard");
 
-
-                            window.location.href =
-                                "admin.html";
-
-                        }
-
-                        /*
-                         * NORMAL USER
-                         */
-
-                        else {
-
-                            console.log(
-                                "Redirecting to User Dashboard"
-                            );
-
-
-                            window.location.href =
-                                "dashboard.html";
-
-                        }
-
-                    },
-                    500
-                );
-
-
-            } catch (error) {
-
-                /* =========================================
+          window.location.href = "dashboard.html";
+        }
+      }, 500);
+    } catch (error) {
+      /* =========================================
                    CONNECTION ERROR
                    ========================================= */
 
-                console.error(
-                    "LOGIN ERROR:",
-                    error
-                );
+      console.error("LOGIN ERROR:", error);
 
+      message.innerText =
+        "Cannot connect to server. Make sure Flask is running.";
 
-                message.innerText =
-                    "Cannot connect to server. Make sure Flask is running.";
+      message.style.color = "red";
 
-                message.style.color =
-                    "red";
+      if (loginButton) {
+        loginButton.disabled = false;
 
+        loginButton.innerText = "Login";
+      }
+    }
+  });
 
-                if (loginButton) {
-
-                    loginButton.disabled =
-                        false;
-
-                    loginButton.innerText =
-                        "Login";
-
-                }
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
+  /* =====================================================
        ENTER KEY SUPPORT
        ===================================================== */
 
-    if (emailInput) {
+  if (emailInput) {
+    emailInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
 
-        emailInput.addEventListener(
-            "keydown",
-            function (event) {
+        passwordInput.focus();
+      }
+    });
+  }
 
-                if (
-                    event.key ===
-                    "Enter"
-                ) {
+  if (passwordInput) {
+    passwordInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
 
-                    event.preventDefault();
-
-                    passwordInput.focus();
-
-                }
-
-            }
-        );
-
-    }
-
-
-    if (passwordInput) {
-
-        passwordInput.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (
-                    event.key ===
-                    "Enter"
-                ) {
-
-                    event.preventDefault();
-
-                    loginForm.requestSubmit();
-
-                }
-
-            }
-        );
-
-    }
-
+        loginForm.requestSubmit();
+      }
+    });
+  }
 });
