@@ -3,7 +3,7 @@
 // =====================================================
 
 const CHATBOT_API =
-    "http://127.0.0.1:5000/api/chatbot/ask";
+    "https://smart-queue-management-system-5vde.onrender.com/api/chatbot/ask";
 
 
 // =====================================================
