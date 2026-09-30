@@ -4,6 +4,13 @@
    ========================================================= */
 
 
+/*
+ * True once the user types in the prediction form.
+ * While true, the 30-second refresh must NOT overwrite
+ * what the user entered.
+ */
+let predictionFormEdited = false;
+
 const API = "http://127.0.0.1:5000";
 
 
@@ -330,6 +337,54 @@ async function loadUserQueue() {
     }
 
 
+    /*
+     * Nothing saved in this browser (new device, cleared storage,
+     * or joined elsewhere): ask the server which queue this
+     * user is waiting in.
+     */
+
+    if (!queueId) {
+
+        try {
+
+            const mine =
+                await fetch(
+                    API +
+                    "/api/queue/mine/" +
+                    user.id
+                );
+
+            if (mine.ok) {
+
+                const mineData =
+                    await mine.json();
+
+                if (mineData.success) {
+
+                    queueId =
+                        String(mineData.queue_id);
+
+                    localStorage.setItem(
+                        "queue_id",
+                        queueId
+                    );
+
+                }
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Find user queue error:",
+                error
+            );
+
+        }
+
+    }
+
+
     if (!queueId) {
 
         return;
@@ -343,7 +398,9 @@ async function loadUserQueue() {
             await fetch(
                 API +
                 "/api/queue/status/" +
-                queueId
+                queueId +
+                "?user_id=" +
+                user.id
             );
 
 
@@ -381,9 +438,13 @@ async function loadUserQueue() {
              * waiting time.
              */
 
-            await predictUserWaitingTime(
-                queue
-            );
+            if (!predictionFormEdited) {
+
+                await predictUserWaitingTime(
+                    queue
+                );
+
+            }
 
         }
 
@@ -581,7 +642,7 @@ function updateQueueDisplay(queue) {
         );
 
 
-    if (queueLengthInput) {
+    if (queueLengthInput && !predictionFormEdited) {
 
         queueLengthInput.value =
             peopleWaiting;
@@ -589,7 +650,7 @@ function updateQueueDisplay(queue) {
     }
 
 
-    if (countersInput) {
+    if (countersInput && !predictionFormEdited) {
 
         countersInput.value =
             queue.active_counters ??
@@ -598,7 +659,7 @@ function updateQueueDisplay(queue) {
     }
 
 
-    if (serviceTimeInput) {
+    if (serviceTimeInput && !predictionFormEdited) {
 
         serviceTimeInput.value =
             queue.average_service_time ??
@@ -818,8 +879,18 @@ async function predictTime() {
             Number(
                 localStorage.getItem(
                     "queue_id"
-                ) || 1
+                )
             );
+
+        if (!queueId) {
+
+            alert(
+                "Please join a queue first."
+            );
+
+            return;
+
+        }
 
 
         const response =
@@ -907,6 +978,20 @@ async function predictTime() {
 
 
 /* =========================================================
+   USE LIVE QUEUE VALUES
+   Refills the prediction form from the joined queue.
+   ========================================================= */
+
+async function useLiveQueueValues() {
+
+    predictionFormEdited = false;
+
+    await loadUserQueue();
+
+}
+
+
+/* =========================================================
    LOGOUT
    ========================================================= */
 
@@ -954,28 +1039,34 @@ document.addEventListener(
 
 
         /*
-         * Recalculate prediction when
-         * arrival rate changes.
+         * Remember when the user edits the prediction form
+         * so auto-refresh never overwrites their values.
          */
 
-        const arrivalInput =
-            document.getElementById(
-                "arrivalRate"
-            );
+        [
+            "queueLength",
+            "counters",
+            "serviceTime",
+            "arrivalRate"
+        ].forEach(function (id) {
 
+            const field =
+                document.getElementById(id);
 
-        if (arrivalInput) {
+            if (field) {
 
-            arrivalInput.addEventListener(
-                "change",
-                function () {
+                field.addEventListener(
+                    "input",
+                    function () {
 
-                    loadUserQueue();
+                        predictionFormEdited = true;
 
-                }
-            );
+                    }
+                );
 
-        }
+            }
+
+        });
 
     }
 );
