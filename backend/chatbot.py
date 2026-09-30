@@ -1,6 +1,10 @@
+import re
+from datetime import datetime
+
 from flask import Blueprint, request, jsonify
 
 from backend.database import get_db_connection
+from backend.ml.predict import predict_waiting_time
 
 
 chatbot = Blueprint("chatbot", __name__)
@@ -10,12 +14,11 @@ chatbot = Blueprint("chatbot", __name__)
 # GET THE CURRENT USER'S QUEUE INFORMATION
 # ============================================================
 
-def get_user_queue_info(user_id):
+def get_user_queue_info(user_id, queue_id=None):
 
     connection = get_db_connection()
 
-    # Get the user's latest queue entry
-    user_entry = connection.execute("""
+    base_query = """
         SELECT
             qe.id,
             qe.queue_id,
@@ -25,14 +28,45 @@ def get_user_queue_info(user_id):
             q.queue_name,
             q.service_type,
             q.active_counters,
-            q.average_service_time
+            q.average_service_time,
+            q.people_waiting
         FROM queue_entries qe
         INNER JOIN queues q
             ON qe.queue_id = q.id
         WHERE qe.user_id = ?
-        ORDER BY qe.id DESC
-        LIMIT 1
-    """, (user_id,)).fetchone()
+    """
+
+    user_entry = None
+
+    # 1) The queue the dashboard says the user is in (waiting entry)
+    if queue_id is not None:
+        user_entry = connection.execute(
+            base_query + """
+            AND qe.queue_id = ?
+            AND qe.status = 'waiting'
+            ORDER BY qe.id DESC
+            LIMIT 1
+            """, (user_id, queue_id)
+        ).fetchone()
+
+    # 2) Otherwise the user's latest *waiting* entry in any queue
+    if not user_entry:
+        user_entry = connection.execute(
+            base_query + """
+            AND qe.status = 'waiting'
+            ORDER BY qe.id DESC
+            LIMIT 1
+            """, (user_id,)
+        ).fetchone()
+
+    # 3) Otherwise the latest entry of any status (e.g. already served)
+    if not user_entry:
+        user_entry = connection.execute(
+            base_query + """
+            ORDER BY qe.id DESC
+            LIMIT 1
+            """, (user_id,)
+        ).fetchone()
 
     if not user_entry:
         connection.close()
@@ -42,60 +76,50 @@ def get_user_queue_info(user_id):
     entry_id = user_entry["id"]
     token_number = user_entry["token_number"]
 
-    # --------------------------------------------------------
-    # Count all people currently waiting in this queue
-    # --------------------------------------------------------
-
-    people_waiting = connection.execute("""
-        SELECT COUNT(*) AS total
-        FROM queue_entries
-        WHERE queue_id = ?
-        AND status = 'waiting'
-    """, (queue_id,)).fetchone()
-
-    # --------------------------------------------------------
-    # Count people ahead of the current user
-    # --------------------------------------------------------
-
+    # People ahead = still-waiting entries in THIS queue joined earlier
     people_ahead = connection.execute("""
         SELECT COUNT(*) AS total
         FROM queue_entries
         WHERE queue_id = ?
         AND status = 'waiting'
-        AND token_number < ?
-    """, (
-        queue_id,
-        token_number
-    )).fetchone()
+        AND id < ?
+    """, (queue_id, entry_id)).fetchone()["total"]
 
-    # --------------------------------------------------------
-    # Get latest prediction for this queue
-    # --------------------------------------------------------
+    if user_entry["status"] != "waiting":
+        people_ahead = 0
 
     latest_prediction = connection.execute("""
-        SELECT
-            predicted_waiting_time,
-            created_at
+        SELECT predicted_waiting_time
         FROM predictions
         WHERE queue_id = ?
         ORDER BY id DESC
         LIMIT 1
     """, (queue_id,)).fetchone()
 
-    # --------------------------------------------------------
-    # Calculate queue position
-    # --------------------------------------------------------
-
-    position = people_ahead["total"] + 1
-
     connection.close()
 
+    # Same number the dashboard shows (queues.people_waiting)
+    people_waiting = int(user_entry["people_waiting"] or 0)
+
+    # Compute the estimate live for THIS queue. Relying only on the
+    # stored predictions table meant queues that never had a
+    # prediction saved (every queue except the first) had no answer.
     predicted_waiting_time = None
 
-    if latest_prediction:
-        predicted_waiting_time = (
-            latest_prediction["predicted_waiting_time"]
+    try:
+        now = datetime.now()
+        predicted_waiting_time = predict_waiting_time(
+            people_waiting,
+            int(user_entry["active_counters"] or 1),
+            float(user_entry["average_service_time"] or 1),
+            now.hour,
+            now.weekday(),
+            1
         )
+    except Exception as error:
+        print("Chatbot prediction error:", error)
+        if latest_prediction:
+            predicted_waiting_time = latest_prediction["predicted_waiting_time"]
 
     return {
         "entry_id": entry_id,
@@ -106,9 +130,9 @@ def get_user_queue_info(user_id):
         "service_type": user_entry["service_type"],
         "active_counters": user_entry["active_counters"],
         "average_service_time": user_entry["average_service_time"],
-        "people_waiting": people_waiting["total"],
-        "people_ahead": people_ahead["total"],
-        "position": position,
+        "people_waiting": people_waiting,
+        "people_ahead": people_ahead,
+        "position": people_ahead + 1,
         "predicted_waiting_time": predicted_waiting_time
     }
 
@@ -127,6 +151,17 @@ def ask():
     ).strip().lower()
 
     user_id = data.get("user_id")
+
+    requested_queue_id = data.get("queue_id")
+
+    try:
+        requested_queue_id = (
+            int(requested_queue_id)
+            if requested_queue_id not in (None, "")
+            else None
+        )
+    except (ValueError, TypeError):
+        requested_queue_id = None
 
     # --------------------------------------------------------
     # Check question
@@ -168,7 +203,10 @@ def ask():
 
     try:
 
-        queue_info = get_user_queue_info(user_id)
+        queue_info = get_user_queue_info(
+            user_id,
+            requested_queue_id
+        )
 
     except Exception as error:
 
@@ -184,14 +222,10 @@ def ask():
     # GREETING
     # ========================================================
 
-    if any(word in question for word in [
-        "hello",
-        "hi",
-        "hey",
-        "good morning",
-        "good afternoon",
-        "good evening"
-    ]):
+    if re.search(
+        r"\b(hello|hi|hey|good morning|good afternoon|good evening)\b",
+        question
+    ):
 
         return jsonify({
             "success": True,

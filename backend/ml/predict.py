@@ -31,22 +31,40 @@ def predict_waiting_time(
             "Train the model first."
         )
 
-    model = joblib.load(MODEL_PATH)
+    loaded = joblib.load(MODEL_PATH)
 
-    input_data = [[
+    features = [
         queue_length,
         active_counters,
         avg_service_time,
         hour,
         day_of_week,
         arrival_rate
-    ]]
+    ]
 
-    prediction = model.predict(
-        input_data
-    )
+    # New hybrid model: basic estimate + learned correction
+    if isinstance(loaded, dict) and loaded.get("type") == "residual":
 
-    return round(
-        float(prediction[0]),
-        2
-    )
+        base_estimate = (
+            queue_length
+            * avg_service_time
+            / max(active_counters, 1)
+        )
+
+        correction = loaded["model"].predict(
+            [features + [base_estimate]]
+        )[0]
+
+        prediction = max(
+            0.0,
+            base_estimate + float(correction)
+        )
+
+    # Old model format (still works if not retrained yet)
+    else:
+
+        prediction = float(
+            loaded.predict([features])[0]
+        )
+
+    return round(prediction, 2)

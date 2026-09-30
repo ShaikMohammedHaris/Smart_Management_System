@@ -542,14 +542,57 @@ def join_queue():
     )).fetchone()
 
 
+    # --------------------------------------------------------
+    # Auto-create the queue if this ID does not exist yet
+    # --------------------------------------------------------
+
     if not q:
 
-        connection.close()
+        existing = connection.execute("""
+            SELECT status
+            FROM queues
+            WHERE id = ?
+        """, (
+            queue_id,
+        )).fetchone()
 
-        return jsonify({
-            "success": False,
-            "message": "Queue not found"
-        }), 404
+        if existing:
+
+            # Queue exists but is not active
+            connection.close()
+
+            return jsonify({
+                "success": False,
+                "message": "This queue is not active"
+            }), 400
+
+        if queue_id < 1 or queue_id > 10000:
+
+            connection.close()
+
+            return jsonify({
+                "success": False,
+                "message": "Queue ID must be between 1 and 10000"
+            }), 400
+
+        connection.execute("""
+            INSERT INTO queues
+            (
+                id,
+                queue_name,
+                service_type,
+                active_counters,
+                average_service_time,
+                people_waiting,
+                status
+            )
+            VALUES (?, ?, 'general service', 1, 5, 0, 'active')
+        """, (
+            queue_id,
+            f"Queue {queue_id}"
+        ))
+
+        connection.commit()
 
 
     # --------------------------------------------------------
@@ -638,8 +681,9 @@ def join_queue():
 @queue.route("/status/<int:queue_id>", methods=["GET"])
 def queue_status(queue_id):
 
-    connection = get_db_connection()
+    user_id = request.args.get("user_id", type=int)
 
+    connection = get_db_connection()
 
     q = connection.execute("""
         SELECT
@@ -652,20 +696,14 @@ def queue_status(queue_id):
             status
         FROM queues
         WHERE id = ?
-    """, (
-        queue_id,
-    )).fetchone()
-
+    """, (queue_id,)).fetchone()
 
     if not q:
-
         connection.close()
-
         return jsonify({
             "success": False,
             "message": "Queue not found"
         }), 404
-
 
     waiting_entries = connection.execute("""
         SELECT
@@ -677,66 +715,92 @@ def queue_status(queue_id):
         WHERE queue_id = ?
         AND status = 'waiting'
         ORDER BY id
-    """, (
-        queue_id,
-    )).fetchall()
+    """, (queue_id,)).fetchall()
 
+    entries = [
+        {
+            "token_number": e["token_number"],
+            "user_id": e["user_id"],
+            "joined_at": e["joined_at"],
+            "status": e["status"]
+        }
+        for e in waiting_entries
+    ]
+
+    queue_data = {
+        "id": q["id"],
+        "name": q["queue_name"],
+        "service_type": q["service_type"],
+        "active_counters": q["active_counters"],
+        "average_service_time": q["average_service_time"],
+        "people_waiting": q["people_waiting"],
+        "status": q["status"]
+    }
+
+    # Per-user details (token, people ahead, position) for THIS queue
+    if user_id is not None:
+
+        mine = connection.execute("""
+            SELECT id, token_number
+            FROM queue_entries
+            WHERE queue_id = ?
+            AND user_id = ?
+            AND status = 'waiting'
+            ORDER BY id DESC
+            LIMIT 1
+        """, (queue_id, user_id)).fetchone()
+
+        if mine:
+            ahead = connection.execute("""
+                SELECT COUNT(*) AS total
+                FROM queue_entries
+                WHERE queue_id = ?
+                AND status = 'waiting'
+                AND id < ?
+            """, (queue_id, mine["id"])).fetchone()
+
+            queue_data["token_number"] = mine["token_number"]
+            queue_data["people_ahead"] = ahead["total"]
+            queue_data["position"] = ahead["total"] + 1
 
     connection.close()
 
+    return jsonify({
+        "success": True,
+        "queue": queue_data,
+        "waiting_entries": entries
+    })
 
-    entries = []
 
+# ============================================================
+# QUEUE THE USER IS CURRENTLY WAITING IN
+# ============================================================
 
-    for entry in waiting_entries:
+@queue.route("/mine/<int:user_id>", methods=["GET"])
+def user_queue(user_id):
 
-        entries.append({
+    connection = get_db_connection()
 
-            "token_number":
-                entry["token_number"],
+    entry = connection.execute("""
+        SELECT queue_id
+        FROM queue_entries
+        WHERE user_id = ?
+        AND status = 'waiting'
+        ORDER BY id DESC
+        LIMIT 1
+    """, (user_id,)).fetchone()
 
-            "user_id":
-                entry["user_id"],
+    connection.close()
 
-            "joined_at":
-                entry["joined_at"],
-
-            "status":
-                entry["status"]
-
-        })
-
+    if not entry:
+        return jsonify({
+            "success": False,
+            "message": "You are not waiting in any queue"
+        }), 404
 
     return jsonify({
-
         "success": True,
-
-        "queue": {
-
-            "id": q["id"],
-
-            "name": q["queue_name"],
-
-            "service_type":
-                q["service_type"],
-
-            "active_counters":
-                q["active_counters"],
-
-            "average_service_time":
-                q["average_service_time"],
-
-            "people_waiting":
-                q["people_waiting"],
-
-            "status":
-                q["status"]
-
-        },
-
-        "waiting_entries":
-            entries
-
+        "queue_id": entry["queue_id"]
     })
 
 
